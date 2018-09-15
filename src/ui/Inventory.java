@@ -28,7 +28,7 @@ public class Inventory {
                 } else if (itemsList.size() > 0) {
                     for (int c = 0; c < itemsList.size(); c++) {
                         i = itemsList.get(c);
-                        if (i.name.equals(name)) { // this breaks if 'else' (below) is run between
+                        if (i.name.equals(name)) {
                             performAdd(i);
                             break;
                         }
