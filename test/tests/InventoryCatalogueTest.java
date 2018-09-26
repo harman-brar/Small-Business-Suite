@@ -12,9 +12,11 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class InventoryCatalogueTest {
     private ArrayList<Item> itemsList = new ArrayList<>();
     private Item item = new Item();
+    private InventoryCatalogue cat;
 
     @BeforeEach
     void setUp() {
+        cat = new InventoryCatalogue();
         itemsList = new ArrayList<>();
         item = new Item();
     }
@@ -22,14 +24,14 @@ public class InventoryCatalogueTest {
     @Test
     void testInsertItem() {
         assertEquals(0, itemsList.size());
-        InventoryCatalogue.insertItem(item);
+        cat.insertItem(item);
         assertEquals(1, itemsList.size());
     }
 
     @Test
     void testCreateItem() {
         assertEquals(0, itemsList.size());
-        InventoryCatalogue.createItem("Bob");
+        cat.createItem("Bob");
         assertEquals(1, itemsList.size());
         assertEquals("Bob", itemsList.get(0).name);
     }
@@ -37,13 +39,13 @@ public class InventoryCatalogueTest {
     @Test
     void testPerformAddAmountNotZero() {
         assertEquals(0, item.amount);
-        InventoryCatalogue.performAdd(String.valueOf(10), item);
+        cat.performAdd(String.valueOf(10), item);
         assertEquals(10, item.amount);
     }
     @Test
     void testPerformAddAmountZero() {
         assertEquals(0, item.amount);
-        InventoryCatalogue.performAdd(String.valueOf(0), item);
+        cat.performAdd(String.valueOf(0), item);
         assertEquals(0, item.amount); // add 10 in interaction
     }
 
@@ -51,7 +53,7 @@ public class InventoryCatalogueTest {
     void testPerformRemovalAmountNotZero() {
         item.amount = 10;
         assertEquals(10, item.amount);
-        InventoryCatalogue.performRemoval(String.valueOf(10), item);
+        cat.performRemoval(String.valueOf(10), item);
         assertEquals(0, item.amount); // add 10 in interaction
     }
 
@@ -59,7 +61,7 @@ public class InventoryCatalogueTest {
     void testPerformRemovalAmountZero() {
         item.amount = 10;
         assertEquals(10, item.amount);
-        InventoryCatalogue.performRemoval(String.valueOf(0), item);
+        cat.performRemoval(String.valueOf(0), item);
         assertEquals(10, item.amount); // add 10 in interaction
     }
 }

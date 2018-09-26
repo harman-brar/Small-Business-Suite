@@ -6,8 +6,8 @@ import java.util.Scanner;
 // Represents a catalogue of items in inventory, maintained by the user
 public class InventoryCatalogue {
 
-    private static Scanner scanner = new Scanner(System.in);
-    private static ArrayList<Item> itemsList = new ArrayList<>();
+    private Scanner scanner = new Scanner(System.in);
+    private ArrayList<Item> itemsList = new ArrayList<>();
     private String name;
 
     // EFFECTS: constructs Inventory Catalogue and establishes an interaction loop that allows user to add
@@ -105,7 +105,7 @@ public class InventoryCatalogue {
     }
 
     // EFFECTS: handles user value input for amount
-    public static String getStringAmount() {
+    private String getStringAmount() {
         System.out.println("How many units would you like to add?");
         return scanner.nextLine();
     }
@@ -113,7 +113,7 @@ public class InventoryCatalogue {
     // REQUIRES: Item exists, stringAmount >= 0
     // MODIFIES: this
     // EFFECTS: removes quantity units from existing amount of item
-    public static void performRemoval(String stringAmount, Item item) {
+    public void performRemoval(String stringAmount, Item item) {
         int localAmount = Integer.parseInt(stringAmount);
         item.amount -= localAmount;
         System.out.println(localAmount + " units removed from stock of " + item.name);
@@ -122,7 +122,7 @@ public class InventoryCatalogue {
     // REQUIRES: Item exists, stringAmount >= 0
     // MODIFIES: this
     // EFFECTS: adds quantity units to existing amount of item
-    public static void performAdd(String stringAmount, Item item) {
+    public void performAdd(String stringAmount, Item item) {
         int localAmount = Integer.parseInt(stringAmount);
         item.amount += localAmount;
         System.out.println(localAmount + " units added to stock of " + item.name);
@@ -130,7 +130,7 @@ public class InventoryCatalogue {
 
     // MODIFIES: this
     // EFFECTS: creates an item with the given name and adds it to item catalogue
-    public static Item createItem(String nameOfItem) {
+    public Item createItem(String nameOfItem) {
         Item itemToAdd = new Item();
         itemToAdd.name = nameOfItem;
         insertItem(itemToAdd);
@@ -141,7 +141,7 @@ public class InventoryCatalogue {
     // REQUIRES: Item must not be null
     // MODIFIES: this
     // EFFECTS: Inserts item into inventory catalogue
-    public static void insertItem(Item itemToAdd) {
+    public void insertItem(Item itemToAdd) {
         itemsList.add(itemToAdd);
         System.out.println("Item: " + itemToAdd.name + " created in inventory");
     }
