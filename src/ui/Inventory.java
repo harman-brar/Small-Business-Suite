@@ -1,11 +1,12 @@
 package ui;
 
-import catalogue.InventoryCatalogue;
+import implementatons.InventoryCatalogue;
+import javafx.application.Application;
 
 public class Inventory {
 
     public static void main(String args[]) {
-        new InventoryCatalogue();
+        Application.launch(InventoryCatalogue.class, args);
     }
 
 }
