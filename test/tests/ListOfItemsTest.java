@@ -13,6 +13,26 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class ListOfItemsTest {
 
     @Test
+    public void getSizeAggregates() {
+        ListOfItems aggregatesList = new AggregatesList();
+        Item a = new Aggregate();
+        Item b = new Aggregate();
+        aggregatesList.insertItem(a);
+        aggregatesList.insertItem(b);
+        assertEquals(2, aggregatesList.getSize());
+    }
+
+    @Test
+    public void getSizeTurf() {
+        ListOfItems turfList = new TurfList();
+        Item a = new Turf();
+        Item b = new Turf();
+        turfList.insertItem(a);
+        turfList.insertItem(b);
+        assertEquals(2, turfList.getSize());
+    }
+
+    @Test
     public void testToStringInsertAggregateList() {
         ListOfItems aggregateList = new AggregatesList();
         Item a = new Aggregate();

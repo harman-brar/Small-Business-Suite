@@ -25,6 +25,11 @@ public class AggregatesList implements ListOfItems {
     }
 
 
+    @Override
+    public int getSize() {
+        return aggregateList.size();
+    }
+
     // EFFECTS: returns string statement of aggregateList
     @Override
     public String toString() {

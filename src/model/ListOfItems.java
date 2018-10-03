@@ -3,6 +3,8 @@ package model;
 
 public interface ListOfItems {
 
+    // EFFECTS: returns size of list
+    int getSize();
     // EFFECTS: returns string statement of list
     String toString();
 

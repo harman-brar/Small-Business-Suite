@@ -18,6 +18,11 @@ public class TurfList implements ListOfItems {
     }
 
 
+    @Override
+    public int getSize() {
+        return turfList.size();
+    }
+
     // EFFECTS: returns string statement of turfList
     @Override
     public String toString() {
