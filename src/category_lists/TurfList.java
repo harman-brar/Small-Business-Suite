@@ -9,34 +9,25 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class TurfList implements ListOfItems {
-    List<Turf> turfList;
-    int index;
+    private List<Item> turfList;
+    private int index;
 
+    // EFFECTS: constructs new turfList
     public TurfList() {
         turfList = new ArrayList<>();
     }
 
-    // MODIFIES: this
-    // EFFECTS: adds Turf t to turfList and then prints that it has been add
-    /*public void insertItem(Turf t) {
-        turfList.add(t);
-        System.out.println("Added item " + t.getName() + " to the category list for Turf");
-    }*/
-
-    // EFFECTS: returns number of items in turfList
-    @Override
-    public int size() {
-        return turfList.size();
-    }
 
     // EFFECTS: returns string statement of turfList
     @Override
-    public String show() {
-        String listString = "[ Turf ]: " + turfList.stream().map(Object::toString)
-                .collect(Collectors.joining(", "));
+    public String toString() {
+        String listString = turfList.stream().map(Object::toString)
+                .collect(Collectors.joining("\n"));
         return listString;
     }
 
+    // MODIFIES: this
+    // EFFECTS: if found, removes item with given name from list
     @Override
     public void deleteItem(String nameOfItem) {
         if (contains(nameOfItem)) {
@@ -48,11 +39,31 @@ public class TurfList implements ListOfItems {
         }
     }
 
+    @Override
+    public Item createItem(String nameOfItem) {
+        if (!contains(nameOfItem)) {
+            Item itemToAdd = new Turf();
+            itemToAdd.setName(nameOfItem);
+            insertItem(itemToAdd);
+
+            return itemToAdd;
+        } else {
+            return turfList.get(index);
+        }
+    }
+
+    @Override
+    public void insertItem(Item i) {
+        turfList.add(i);
+        System.out.println("Added item " + i.getName() + " to Turf list");
+    }
+
+    // EFFECTS: returns true if item with given name is already in the list
     public boolean contains(String nameOfItem) {
         boolean isContains = false;
         index = 0;
-        for (Turf t: turfList) {
-            if (t.name.equals(nameOfItem)) {
+        for (Item t: turfList) {
+            if (t.getName().equals(nameOfItem)) {
                 isContains = true;
                 index = turfList.indexOf(t);
                 break;
@@ -61,18 +72,5 @@ public class TurfList implements ListOfItems {
             }
         }
         return isContains;
-    }
-
-    public Turf createTurf(String nameOfItem) {
-        if (!contains(nameOfItem)) {
-            Turf itemToAdd = new Turf();
-            itemToAdd.name = nameOfItem;
-            turfList.add(itemToAdd);
-            System.out.println("Item " + nameOfItem + " added to Turf list");
-
-            return itemToAdd;
-        } else {
-            return turfList.get(index);
-        }
     }
 }

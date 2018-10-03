@@ -9,34 +9,32 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class AggregatesList implements ListOfItems {
-    List<Aggregate> aggregateList;
-    int index;
+    private List<Item> aggregateList;
+    private int index;
 
     public AggregatesList() {
         aggregateList = new ArrayList<>();
     }
 
     // MODIFIES: this
-    // EFFECTS: adds Aggregate a to aggregateList then it is printed that it is added
-    public void insertItem(Aggregate a) {
-        aggregateList.add(a);
-        System.out.println("Added item " + a.getName() + " to the category list for Aggregates");
+    // EFFECTS: adds Aggregate a to aggregateList then prints that a is added
+    @Override
+    public void insertItem(Item i) {
+        aggregateList.add(i);
+        System.out.println("Added item " + i.getName() + " to Aggregates list");
     }
 
-    // EFFECTS: returns size of aggregateList
-    @Override
-    public int size() {
-        return aggregateList.size();
-    }
 
     // EFFECTS: returns string statement of aggregateList
     @Override
-    public String show() {
-        String listString = "[ Aggregates ]: " + aggregateList.stream().map(Object::toString)
-                .collect(Collectors.joining(", "));
+    public String toString() {
+        String listString = aggregateList.stream().map(Object::toString)
+                .collect(Collectors.joining("\n"));
         return listString;
     }
 
+    // MODIFIES: this
+    // EFFECTS: if found, removes item with given name from list
     @Override
     public void deleteItem(String nameOfItem) {
         if (contains(nameOfItem)) {
@@ -48,11 +46,28 @@ public class AggregatesList implements ListOfItems {
         }
     }
 
+    // MODIFIES: this
+    // EFFECTS: creates new aggregate and adds it to list if it is not already there, otherwise returns index
+    //          of the existing aggregate
+    @Override
+    public Item createItem(String nameOfItem) {
+        if (!contains(nameOfItem)) {
+            Item itemToAdd = new Aggregate();
+            itemToAdd.setName(nameOfItem);
+            insertItem(itemToAdd);
+
+            return itemToAdd;
+        } else {
+            return aggregateList.get(index);
+        }
+    }
+
+    // EFFECTS: returns true if item with given name is already in the list
     public boolean contains(String nameOfItem) {
         boolean isContains = false;
         index = 0;
-        for (Aggregate a: aggregateList) {
-            if (a.name.equals(nameOfItem)) {
+        for (Item a: aggregateList) {
+            if (a.getName().equals(nameOfItem)) {
                 isContains = true;
                 index = aggregateList.indexOf(a);
                 break;
@@ -61,18 +76,5 @@ public class AggregatesList implements ListOfItems {
             }
         }
         return isContains;
-    }
-
-    public Aggregate createAggregate(String nameOfItem) {
-        if (!contains(nameOfItem)) {
-            Aggregate itemToAdd = new Aggregate();
-            itemToAdd.name = nameOfItem;
-            aggregateList.add(itemToAdd);
-            System.out.println("Item " + nameOfItem + " added to Aggregates list");
-
-            return itemToAdd;
-        } else {
-            return aggregateList.get(index);
-        }
     }
 }
