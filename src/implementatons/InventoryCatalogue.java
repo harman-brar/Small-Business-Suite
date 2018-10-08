@@ -21,6 +21,7 @@ import model.ListOfItems;
 import product_categories.Aggregate;
 import product_categories.Turf;
 import ui.DisplayInventory;
+import ui.DisplaySearchItem;
 
 import java.io.*;
 import java.nio.file.Files;
@@ -35,6 +36,7 @@ public class InventoryCatalogue extends Application {
     private ListOfItems aggregatesList, turfList;
     private Stage window;
     private Scene scene1, scene2;
+    private Item i;
 
 
     public InventoryCatalogue() {
@@ -58,13 +60,13 @@ public class InventoryCatalogue extends Application {
         Button loadInventory = new Button("Load");
         loadInventory.setOnAction(event -> {
             try {
-                loadAggregates();
+                load(aggregatesList, "aggregateOutput.txt");
             } catch (IOException e) {
                 e.printStackTrace();
             }
 
             try {
-                loadTurf();
+                load(turfList, "turfOutput.txt");
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -75,7 +77,8 @@ public class InventoryCatalogue extends Application {
                 FXCollections.observableArrayList(
                         "Add",
                         "Remove",
-                        "Delete"
+                        "Delete",
+                        "Search"
                 );
         // Action dropdown
         final ComboBox action = new ComboBox(operations);
@@ -133,6 +136,9 @@ public class InventoryCatalogue extends Application {
                     Item t = turfList.createItem(name.getText());
                     turfList.deleteItem(name.getText());
                 }
+            } else if (action.getValue().equals("Search")) {
+                i = findItem(name.getText());
+                DisplaySearchItem.display("Search Results", i.toString());
             }
             else {
                 System.out.println("Action not recognized.");
@@ -143,7 +149,7 @@ public class InventoryCatalogue extends Application {
         // See Inventory Button
         Button doneButton = new Button("See Inventory");
         doneButton.setOnAction((ActionEvent event) -> {
-            DisplayInventory.display("Inventory", "[ Aggregates ]: " + aggregatesList.toString(), "[ Turf ]: " + turfList.toString());
+            DisplayInventory.display("Inventory", aggregatesList.toString(), turfList.toString());
         });
 
         //Layout 1 - children laid out in vertical column
@@ -177,70 +183,50 @@ public class InventoryCatalogue extends Application {
 
     }
 
+    private Item findItem(String text) {
+        if (aggregatesList.getItem(text) != null) {
+            i = aggregatesList.getItem(text);
+        } else if (turfList.getItem(text) != null) {
+            i = turfList.getItem(text);
+        }
+        return i;
+    }
+
     private void closeOperation() {
         try {
-            saveAggregates();
+            save(aggregatesList.toString(), "aggregateOutput.txt");
         } catch (IOException e) {
             e.printStackTrace();
         }
         try {
-            saveTurf();
+            save(turfList.toString(), "turfOutput.txt");
         } catch (IOException e) {
             e.printStackTrace();
         }
         window.close();
     }
 
-    private void saveAggregates() throws IOException {
-        List<String> lines = new ArrayList<>();
-        //PrintWriter writer = new PrintWriter("aggregateOutput.txt","UTF-8");
-        PrintWriter writer = new PrintWriter(new FileOutputStream("aggregateOutput.txt",false));
-        lines.add(aggregatesList.toString());
-        for (String line : lines){
-            writer.println(line);
-        }
-        writer.close();
-        System.out.println("Aggregate entries saved.");
-
-
-    }
-
-    private void saveTurf() throws IOException {
+    private void save(String listToString, String file) throws IOException {
         List<String> lines = new ArrayList<>();
         //PrintWriter writer = new PrintWriter("turfOutput.txt","UTF-8");
-        PrintWriter writer = new PrintWriter(new FileWriter("turfOutput.txt",false));
-        lines.add(turfList.toString());
+        PrintWriter writer = new PrintWriter(new FileWriter(file,false));
+        lines.add(listToString);
         for (String line : lines){
             writer.println(line);
         }
         writer.close();
-        System.out.println("Turf entries saved.");
+        System.out.println("All entries saved.");
     }
 
-    private void loadAggregates() throws IOException {
-        List<String> lines = Files.readAllLines(Paths.get("aggregateOutput.txt"));
+    private void load(ListOfItems list, String file) throws IOException {
+        List<String> lines = Files.readAllLines(Paths.get(file));
         for (String line : lines){
             if (!line.isEmpty()) {
                 ArrayList<String> partsOfLine = splitOnSpace(line);
                 Item l = new Aggregate();
                 l.setName(partsOfLine.get(0));
                 l.setAmount(partsOfLine.get(1));
-                aggregatesList.insertItem(l);
-                System.out.print("Name: " + partsOfLine.get(0) + " ");
-                System.out.println("Amount: " + partsOfLine.get(1));
-            }
-        }
-    }
-
-    private void loadTurf() throws IOException {
-        List<String> lines = Files.readAllLines(Paths.get("turfOutput.txt"));
-        for (String line : lines){
-            if (!line.isEmpty()) {
-                ArrayList<String> partsOfLine = splitOnSpace(line);
-                Item l = new Turf();
-                l.setName(partsOfLine.get(0));
-                l.setAmount(partsOfLine.get(1));
-                turfList.insertItem(l);
+                list.insertItem(l);
                 System.out.print("Name: " + partsOfLine.get(0) + " ");
                 System.out.println("Amount: " + partsOfLine.get(1));
             }

@@ -5,6 +5,7 @@ public interface ListOfItems {
 
     // EFFECTS: returns size of list
     int getSize();
+
     // EFFECTS: returns string statement of list
     String toString();
 
@@ -19,6 +20,9 @@ public interface ListOfItems {
     // MODIFIES: THIS
     // EFFECTS:
     void insertItem(Item i);
+
+    // EFFECTS: returns item with name that matches nameOfItem
+    Item getItem(String nameOfItem);
 
 
 }

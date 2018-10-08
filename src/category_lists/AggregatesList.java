@@ -11,6 +11,7 @@ import java.util.stream.Collectors;
 public class AggregatesList implements ListOfItems {
     private List<Item> aggregateList;
     private int index;
+    private Item item;
 
     public AggregatesList() {
         aggregateList = new ArrayList<>();
@@ -22,6 +23,18 @@ public class AggregatesList implements ListOfItems {
     public void insertItem(Item i) {
         aggregateList.add(i);
         System.out.println("Added item " + i.getName() + " to Aggregates list");
+    }
+
+    @Override
+    public Item getItem(String nameOfItem) {
+        item = null;
+        for (Item i: aggregateList) {
+            if (i.getName().equals(nameOfItem)) {
+                item = i;
+                break;
+            }
+        }
+        return item;
     }
 
 
@@ -68,7 +81,7 @@ public class AggregatesList implements ListOfItems {
     }
 
     // EFFECTS: returns true if item with given name is already in the list
-    public boolean contains(String nameOfItem) {
+    private boolean contains(String nameOfItem) {
         boolean isContains = false;
         index = 0;
         for (Item a: aggregateList) {

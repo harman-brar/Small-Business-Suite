@@ -60,23 +60,4 @@ public class ListOfItemsTest {
         assertEquals("Doug 10\nBobby 10", turfList.toString());
     }
 
-    @Test
-    public void testCreateAggregate() {
-
-    }
-
-    @Test
-    public void testDeleteAggregate() {
-
-    }
-
-    @Test
-    public void testCreateTurf() {
-
-    }
-
-    @Test
-    public void testDeleteTurf() {
-
-    }
 }

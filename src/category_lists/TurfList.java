@@ -11,6 +11,7 @@ import java.util.stream.Collectors;
 public class TurfList implements ListOfItems {
     private List<Item> turfList;
     private int index;
+    private Item item;
 
     // EFFECTS: constructs new turfList
     public TurfList() {
@@ -61,6 +62,18 @@ public class TurfList implements ListOfItems {
     public void insertItem(Item i) {
         turfList.add(i);
         System.out.println("Added item " + i.getName() + " to Turf list");
+    }
+
+    @Override
+    public Item getItem(String nameOfItem) {
+        item = null;
+        for (Item i: turfList) {
+            if (i.getName().equals(nameOfItem)) {
+                item = i;
+                break;
+            }
+        }
+        return item;
     }
 
     // EFFECTS: returns true if item with given name is already in the list
