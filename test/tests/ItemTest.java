@@ -2,8 +2,6 @@ package tests;
 
 import model.Item;
 import org.junit.jupiter.api.Test;
-import product_categories.Aggregate;
-import product_categories.Turf;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -11,14 +9,14 @@ public class ItemTest {
 
     @Test
     public void testGetSetName() {
-        Item a = new Aggregate();
+        Item a = new Item();
         a.setName("Bob");
         assertEquals("Bob", a.getName());
     }
 
     @Test
     public void testGetSetAmount() {
-        Item a = new Aggregate();
+        Item a = new Item();
         a.setAmount("2");
         assertEquals(2, a.getAmount());
     }
@@ -26,7 +24,7 @@ public class ItemTest {
 
     @Test
     public void testToString() {
-        Item a = new Aggregate();
+        Item a = new Item();
         a.setName("Doug");
         a.setAmount("10");
         assertEquals("Doug 10", a.toString());
@@ -35,7 +33,7 @@ public class ItemTest {
 
     @Test
     public void performAdd() {
-        Item a = new Aggregate();
+        Item a = new Item();
         a.performAdd("10");
         assertEquals(10, a.getAmount());
     }
@@ -43,7 +41,7 @@ public class ItemTest {
 
     @Test
     public void performRemoval() {
-        Item a = new Turf();
+        Item a = new Item();
         a.performAdd("10");
         assertEquals(10, a.getAmount());
         a.performRemoval("8");

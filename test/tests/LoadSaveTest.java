@@ -5,8 +5,6 @@ import implementatons.InventoryCatalogue;
 import model.Item;
 import model.ListOfItems;
 import org.junit.jupiter.api.Test;
-import product_categories.Aggregate;
-
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -40,7 +38,7 @@ public class LoadSaveTest {
         for (String line : lines){
             if (!line.isEmpty()) {
                 ArrayList<String> partsOfLine = InventoryCatalogue.splitOnSpace(line);
-                Item l = new Aggregate();
+                Item l = new Item();
                 l.setName(partsOfLine.get(0));
                 l.setAmount(partsOfLine.get(1));
                 aggregatesList.insertItem(l);

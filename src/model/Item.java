@@ -2,14 +2,16 @@ package model;
 
 import static java.lang.Integer.parseInt;
 
-public abstract class Item {
+public class Item {
     private String name;
     private int amount;
+    private String category;
 
     // EFFECTS: constructs an Aggregate with no name and amount 0
     public Item() {
         name = "";
         amount = 0;
+        category= "";
     }
 
     // EFFECTS: returns name of item
@@ -33,6 +35,17 @@ public abstract class Item {
     // EFFECTS: sets amount as given amount
     public void setAmount(String amount) {
         this.amount = Integer.parseInt(amount);
+    }
+
+    // EFFECTS: returns category of item
+    public String getCategory() {
+        return this.category;
+    }
+
+    // MODIFIES: this
+    // EFFECTS: sets item category to category
+    public void setCategory(String category) {
+        this.category = category;
     }
 
     // EFFECTS: specifies the order in which to return name and current amount of item as a string

@@ -6,7 +6,6 @@ import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -18,8 +17,6 @@ import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import model.Item;
 import model.ListOfItems;
-import product_categories.Aggregate;
-import product_categories.Turf;
 import ui.DisplayInventory;
 import ui.DisplaySearchItem;
 
@@ -45,7 +42,7 @@ public class InventoryCatalogue extends Application {
     }
 
     @Override
-    public void start(Stage primaryStage) {
+    public void start(Stage primaryStage) throws NumberFormatException {
         window = primaryStage;
 
         // --------------------------- EDIT INVENTORY SCENE 1 -------------------------------- \\
@@ -113,19 +110,38 @@ public class InventoryCatalogue extends Application {
             if (action.getValue().equals("Add")) {
                 if (category.getValue().equals("Aggregates")) {
                     Item a = aggregatesList.createItem(name.getText());
-                    a.performAdd(amount.getText());
+                    a.setCategory("Aggregates");
+                    try {
+                        a.performAdd(amount.getText());
+                    } catch (NumberFormatException nfe) {
+                        System.out.println("Please enter a valid number.");
+                    }
                 } else if (category.getValue().equals("Turf")) {
                     Item t = turfList.createItem(name.getText());
-                    t.performAdd(amount.getText());
+                    t.setCategory("Turf");
+                    try {
+                        t.performAdd(amount.getText());
+                    } catch (NumberFormatException nfe) {
+                        System.out.println("Please enter a valid number.");
+                    }
                 }
             }
             else if (action.getValue().equals("Remove")) {
                 if (category.getValue().equals("Aggregates")) {
                     Item a = aggregatesList.createItem(name.getText());
-                    a.performRemoval(amount.getText());
+                    try {
+                        a.performRemoval(amount.getText());
+                    } catch (NumberFormatException nfe) {
+                        System.out.println("Please enter a valid number.");
+                    }
+
                 } else if (category.getValue().equals("Turf")) {
                     Item t = turfList.createItem(name.getText());
-                    t.performRemoval(amount.getText());
+                    try {
+                        t.performRemoval(amount.getText());
+                    } catch (NumberFormatException nfe) {
+                        System.out.println("Please enter a valid number.");
+                    }
                 }
             }
             else if (action.getValue().equals("Delete")) {
@@ -157,20 +173,6 @@ public class InventoryCatalogue extends Application {
         layout1.getChildren().addAll(label1, loadInventory, action, name, category, amount, button1, doneButton);
         layout1.setAlignment(Pos.CENTER);
         scene1 = new Scene(layout1, 350, 400);
-
-
-        // --------------------------- SCENE 2 -------------------------------- \\
-
-        // Label & Button 2
-        Label label2 = new Label("This is scene 2");
-        Button button2 = new Button("Back to scene 1");
-        button2.setOnAction(e -> window.setScene(scene1));
-
-        //Layout 2
-        VBox layout2 = new VBox(20);
-        layout2.getChildren().addAll(label2, button2);
-        layout2.setAlignment(Pos.CENTER);
-        scene2 = new Scene(layout2, 350, 400);
 
         // --------------------------- WINDOW CONFIGURATION -------------------------------- \\
 
@@ -223,7 +225,7 @@ public class InventoryCatalogue extends Application {
         for (String line : lines){
             if (!line.isEmpty()) {
                 ArrayList<String> partsOfLine = splitOnSpace(line);
-                Item l = new Aggregate();
+                Item l = new Item();
                 l.setName(partsOfLine.get(0));
                 l.setAmount(partsOfLine.get(1));
                 list.insertItem(l);

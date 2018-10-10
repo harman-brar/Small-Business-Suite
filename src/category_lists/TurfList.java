@@ -2,7 +2,6 @@ package category_lists;
 
 import model.Item;
 import model.ListOfItems;
-import product_categories.Turf;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -48,7 +47,7 @@ public class TurfList implements ListOfItems {
     @Override
     public Item createItem(String nameOfItem) {
         if (!contains(nameOfItem)) {
-            Item itemToAdd = new Turf();
+            Item itemToAdd = new Item();
             itemToAdd.setName(nameOfItem);
             insertItem(itemToAdd);
 

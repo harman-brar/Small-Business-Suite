@@ -2,7 +2,6 @@ package category_lists;
 
 import model.Item;
 import model.ListOfItems;
-import product_categories.Aggregate;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -70,7 +69,7 @@ public class AggregatesList implements ListOfItems {
     @Override
     public Item createItem(String nameOfItem) {
         if (!contains(nameOfItem)) {
-            Item itemToAdd = new Aggregate();
+            Item itemToAdd = new Item();
             itemToAdd.setName(nameOfItem);
             insertItem(itemToAdd);
 

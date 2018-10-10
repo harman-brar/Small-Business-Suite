@@ -5,8 +5,6 @@ import category_lists.TurfList;
 import model.Item;
 import model.ListOfItems;
 import org.junit.jupiter.api.Test;
-import product_categories.Aggregate;
-import product_categories.Turf;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -15,8 +13,8 @@ public class ListOfItemsTest {
     @Test
     public void getSizeAggregates() {
         ListOfItems aggregatesList = new AggregatesList();
-        Item a = new Aggregate();
-        Item b = new Aggregate();
+        Item a = new Item();
+        Item b = new Item();
         aggregatesList.insertItem(a);
         aggregatesList.insertItem(b);
         assertEquals(2, aggregatesList.getSize());
@@ -25,8 +23,8 @@ public class ListOfItemsTest {
     @Test
     public void getSizeTurf() {
         ListOfItems turfList = new TurfList();
-        Item a = new Turf();
-        Item b = new Turf();
+        Item a = new Item();
+        Item b = new Item();
         turfList.insertItem(a);
         turfList.insertItem(b);
         assertEquals(2, turfList.getSize());
@@ -35,10 +33,10 @@ public class ListOfItemsTest {
     @Test
     public void testToStringInsertAggregateList() {
         ListOfItems aggregateList = new AggregatesList();
-        Item a = new Aggregate();
+        Item a = new Item();
         a.setName("Doug");
         a.setAmount("10");
-        Item b = new Aggregate();
+        Item b = new Item();
         b.setName("Bobby");
         b.setAmount("10");
         aggregateList.insertItem(a);
@@ -49,10 +47,10 @@ public class ListOfItemsTest {
     @Test
     public void testToStringInsertTurfList() {
         ListOfItems turfList = new TurfList();
-        Item a = new Turf();
+        Item a = new Item();
         a.setName("Doug");
         a.setAmount("10");
-        Item b = new Turf();
+        Item b = new Item();
         b.setName("Bobby");
         b.setAmount("10");
         turfList.insertItem(a);
