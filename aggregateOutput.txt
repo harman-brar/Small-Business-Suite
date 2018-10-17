@@ -1,4 +1,3 @@
-Tony 402
-Slade 25
-Nate 10
-Bob 3
+Gates 10
+Snoob 20
+Deet 40

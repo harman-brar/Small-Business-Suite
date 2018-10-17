@@ -1,5 +1,9 @@
 package model;
 
+import exceptions.CapacityReachedException;
+import exceptions.InvalidQuantityException;
+import exceptions.NegativeNumberException;
+
 import static java.lang.Integer.parseInt;
 
 public class Item {
@@ -53,11 +57,16 @@ public class Item {
         return name + " " + amount;
     }
 
-    // REQUIRES: amount > 0
     // MODIFIES: this
     // EFFECTS: adds amount to amount of this
-    public void performAdd(String amount) {
+    public void performAdd(String amount) throws NegativeNumberException, CapacityReachedException {
         int localAmount = parseInt(amount);
+        if (localAmount < 0) {
+            throw new NegativeNumberException();
+        }
+        if (localAmount > 100) {
+            throw new CapacityReachedException();
+        }
         this.amount += localAmount;
         System.out.println(localAmount + " units added to " + this.name);
     }
@@ -66,8 +75,11 @@ public class Item {
     // REQUIRES: amount > 0, amount <= existing amount of item units
     // MODIFIES: this
     // EFFECTS: removes amount from amount of this
-    public void performRemoval(String amount) {
+    public void performRemoval(String amount) throws NegativeNumberException {
         int localAmount = parseInt(amount);
+        if (localAmount < 0) {
+            throw new NegativeNumberException();
+        }
         this.amount -= localAmount;
         System.out.println(localAmount + " units removed from " + this.name);
     }

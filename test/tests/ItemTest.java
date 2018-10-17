@@ -1,5 +1,7 @@
 package tests;
 
+import exceptions.CapacityReachedException;
+import exceptions.NegativeNumberException;
 import model.Item;
 import org.junit.jupiter.api.Test;
 
@@ -34,7 +36,11 @@ public class ItemTest {
     @Test
     public void performAdd() {
         Item a = new Item();
-        a.performAdd("10");
+        try {
+            a.performAdd("10");
+        } catch (NegativeNumberException | CapacityReachedException e) {
+            e.printStackTrace();
+        }
         assertEquals(10, a.getAmount());
     }
 
@@ -42,9 +48,17 @@ public class ItemTest {
     @Test
     public void performRemoval() {
         Item a = new Item();
-        a.performAdd("10");
+        try {
+            a.performAdd("10");
+        } catch (NegativeNumberException | CapacityReachedException e) {
+            e.printStackTrace();
+        }
         assertEquals(10, a.getAmount());
-        a.performRemoval("8");
+        try {
+            a.performRemoval("8");
+        } catch (NegativeNumberException e) {
+            System.out.println("Please enter a valid number.");
+        }
         assertEquals(2, a.getAmount());
     }
 }

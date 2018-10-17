@@ -2,6 +2,9 @@ package implementatons;
 
 import category_lists.AggregatesList;
 import category_lists.TurfList;
+import exceptions.CapacityReachedException;
+import exceptions.InvalidQuantityException;
+import exceptions.NegativeNumberException;
 import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -34,11 +37,13 @@ public class InventoryCatalogue extends Application {
     private Stage window;
     private Scene scene1, scene2;
     private Item i;
+    private boolean append;
 
 
     public InventoryCatalogue() {
         aggregatesList = new AggregatesList();
         turfList = new TurfList();
+        append = true;
     }
 
     @Override
@@ -58,12 +63,14 @@ public class InventoryCatalogue extends Application {
         loadInventory.setOnAction(event -> {
             try {
                 load(aggregatesList, "aggregateOutput.txt");
+                append = false;
             } catch (IOException e) {
                 e.printStackTrace();
             }
 
             try {
                 load(turfList, "turfOutput.txt");
+                append = false;
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -113,35 +120,47 @@ public class InventoryCatalogue extends Application {
                     a.setCategory("Aggregates");
                     try {
                         a.performAdd(amount.getText());
+                    } catch (InvalidQuantityException ie) {
+                        System.out.println("Please enter a valid amount");
                     } catch (NumberFormatException nfe) {
-                        System.out.println("Please enter a valid number.");
+                        System.out.println("Please enter a number");
                     }
                 } else if (category.getValue().equals("Turf")) {
                     Item t = turfList.createItem(name.getText());
                     t.setCategory("Turf");
                     try {
                         t.performAdd(amount.getText());
+                    } catch (InvalidQuantityException ie) {
+                        System.out.println("Please enter a valid amount");
                     } catch (NumberFormatException nfe) {
-                        System.out.println("Please enter a valid number.");
+                        System.out.println("Please enter a number");
                     }
+
                 }
             }
             else if (action.getValue().equals("Remove")) {
                 if (category.getValue().equals("Aggregates")) {
                     Item a = aggregatesList.createItem(name.getText());
+
                     try {
                         a.performRemoval(amount.getText());
+                    } catch (NegativeNumberException e1) {
+                        System.out.println("Please enter a valid amount.");
                     } catch (NumberFormatException nfe) {
                         System.out.println("Please enter a valid number.");
                     }
+
 
                 } else if (category.getValue().equals("Turf")) {
                     Item t = turfList.createItem(name.getText());
                     try {
                         t.performRemoval(amount.getText());
+                    } catch (NegativeNumberException e1) {
+                        System.out.println("Please enter a valid amount.");
                     } catch (NumberFormatException nfe) {
                         System.out.println("Please enter a valid number.");
                     }
+
                 }
             }
             else if (action.getValue().equals("Delete")) {
@@ -196,22 +215,21 @@ public class InventoryCatalogue extends Application {
 
     private void closeOperation() {
         try {
-            save(aggregatesList.toString(), "aggregateOutput.txt");
+            save(aggregatesList.toString(), "aggregateOutput.txt", append);
         } catch (IOException e) {
             e.printStackTrace();
         }
         try {
-            save(turfList.toString(), "turfOutput.txt");
+            save(turfList.toString(), "turfOutput.txt", append);
         } catch (IOException e) {
             e.printStackTrace();
         }
         window.close();
     }
 
-    private void save(String listToString, String file) throws IOException {
+    private void save(String listToString, String file, Boolean append) throws IOException {
         List<String> lines = new ArrayList<>();
-        //PrintWriter writer = new PrintWriter("turfOutput.txt","UTF-8");
-        PrintWriter writer = new PrintWriter(new FileWriter(file,false));
+        PrintWriter writer = new PrintWriter(new FileWriter(file, append));
         lines.add(listToString);
         for (String line : lines){
             writer.println(line);
