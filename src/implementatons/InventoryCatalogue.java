@@ -62,14 +62,14 @@ public class InventoryCatalogue extends Application {
         Button loadInventory = new Button("Load");
         loadInventory.setOnAction(event -> {
             try {
-                load(aggregatesList, "aggregateOutput.txt");
+                LoadSave.load(aggregatesList, "aggregateOutput.txt");
                 append = false;
             } catch (IOException e) {
                 e.printStackTrace();
             }
 
             try {
-                load(turfList, "turfOutput.txt");
+                LoadSave.load(turfList, "turfOutput.txt");
                 append = false;
             } catch (IOException e) {
                 e.printStackTrace();
@@ -203,7 +203,9 @@ public class InventoryCatalogue extends Application {
         window.show();
 
     }
-
+    // REQUIRES: item is in one and only one of the category list
+    // MODIFIES: this
+    // EFFECTS: finds item with name text
     private Item findItem(String text) {
         if (aggregatesList.getItem(text) != null) {
             i = aggregatesList.getItem(text);
@@ -213,49 +215,20 @@ public class InventoryCatalogue extends Application {
         return i;
     }
 
+    // MODIFIES: this
+    // EFFECTS: saves inventory and then closes program window
     private void closeOperation() {
         try {
-            save(aggregatesList.toString(), "aggregateOutput.txt", append);
+            LoadSave.save(aggregatesList.toString(), "aggregateOutput.txt", append);
         } catch (IOException e) {
             e.printStackTrace();
         }
         try {
-            save(turfList.toString(), "turfOutput.txt", append);
+            LoadSave.save(turfList.toString(), "turfOutput.txt", append);
         } catch (IOException e) {
             e.printStackTrace();
         }
         window.close();
-    }
-
-    private void save(String listToString, String file, Boolean append) throws IOException {
-        List<String> lines = new ArrayList<>();
-        PrintWriter writer = new PrintWriter(new FileWriter(file, append));
-        lines.add(listToString);
-        for (String line : lines){
-            writer.println(line);
-        }
-        writer.close();
-        System.out.println("All entries saved.");
-    }
-
-    private void load(ListOfItems list, String file) throws IOException {
-        List<String> lines = Files.readAllLines(Paths.get(file));
-        for (String line : lines){
-            if (!line.isEmpty()) {
-                ArrayList<String> partsOfLine = splitOnSpace(line);
-                Item l = new Item();
-                l.setName(partsOfLine.get(0));
-                l.setAmount(partsOfLine.get(1));
-                list.insertItem(l);
-                System.out.print("Name: " + partsOfLine.get(0) + " ");
-                System.out.println("Amount: " + partsOfLine.get(1));
-            }
-        }
-    }
-
-    public static ArrayList<String> splitOnSpace(String line){
-        String[] splits = line.split(" ");
-        return new ArrayList<>(Arrays.asList(splits));
     }
 
 }
