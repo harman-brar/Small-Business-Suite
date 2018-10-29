@@ -2,8 +2,6 @@ package implementatons;
 
 import category_lists.AggregatesList;
 import category_lists.TurfList;
-import exceptions.CapacityReachedException;
-import exceptions.InvalidQuantityException;
 import exceptions.NegativeNumberException;
 import javafx.application.Application;
 import javafx.collections.FXCollections;
@@ -24,11 +22,6 @@ import ui.DisplayInventory;
 import ui.DisplaySearchItem;
 
 import java.io.*;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 import static javafx.scene.paint.Color.rgb;
 
@@ -120,7 +113,7 @@ public class InventoryCatalogue extends Application {
                     a.setCategory("Aggregates");
                     try {
                         a.performAdd(amount.getText());
-                    } catch (InvalidQuantityException ie) {
+                    } catch (NegativeNumberException ie) {
                         System.out.println("Please enter a valid amount");
                     } catch (NumberFormatException nfe) {
                         System.out.println("Please enter a number");
@@ -130,7 +123,7 @@ public class InventoryCatalogue extends Application {
                     t.setCategory("Turf");
                     try {
                         t.performAdd(amount.getText());
-                    } catch (InvalidQuantityException ie) {
+                    } catch (NegativeNumberException ie) {
                         System.out.println("Please enter a valid amount");
                     } catch (NumberFormatException nfe) {
                         System.out.println("Please enter a number");
