@@ -129,75 +129,43 @@ public class InventoryCatalogue extends Application {
         button1.setOnAction(e -> {
 
             if (action.getValue().equals("Add")) {
-                if (category.getValue().equals("Aggregates")) {
-                    Item a = aggregatesList.createItem(name.getText());
-                    a.setCategory("Aggregates");
-                    try {
-                        a.performAdd(amount.getText());
-                    } catch (NegativeNumberException ie) {
-                        System.out.println("Please enter a valid amount");
-                    } catch (NumberFormatException nfe) {
-                        System.out.println("Please enter a number");
-                    }
-                    catalogue.replace("Aggregates", aggregatesList);
-                    showActionPopup(action.getValue(), popup, name, category);
-
-                } else if (category.getValue().equals("Turf")) {
-                    Item t = turfList.createItem(name.getText());
-                    t.setCategory("Turf");
-                    try {
-                        t.performAdd(amount.getText());
-                    } catch (NegativeNumberException ie) {
-                        System.out.println("Please enter a valid amount");
-                    } catch (NumberFormatException nfe) {
-                        System.out.println("Please enter a number");
-                    }
-                    catalogue.replace("Turf", turfList);
-                    showActionPopup(action.getValue(), popup, name, category);
-                }
+                addOperation(popup, action, name, category, amount);
             }
             else if (action.getValue().equals("Remove")) {
-                if (category.getValue().equals("Aggregates")) {
-                    Item a = aggregatesList.createItem(name.getText());
-
-                    try {
-                        a.performRemoval(amount.getText());
-                    } catch (NegativeNumberException e1) {
-                        System.out.println("Please enter a valid amount.");
-                    } catch (NumberFormatException nfe) {
-                        System.out.println("Please enter a valid number.");
-                    }
-                    catalogue.replace("Aggregates", aggregatesList);
-
-                } else if (category.getValue().equals("Turf")) {
-                    Item t = turfList.createItem(name.getText());
-                    try {
-                        t.performRemoval(amount.getText());
-                    } catch (NegativeNumberException e1) {
-                        System.out.println("Please enter a valid amount.");
-                    } catch (NumberFormatException nfe) {
-                        System.out.println("Please enter a valid number.");
-                    }
-                    catalogue.replace("Turf", turfList);
-                }
-
+                removeOperation(name, category, amount);
                 showActionPopup(action.getValue(), popup, name, category);
             }
             else if (action.getValue().equals("Delete")) {
-                if (category.getValue().equals("Aggregates")) {
-                    Item a = aggregatesList.createItem(name.getText());
-                    aggregatesList.deleteItem(name.getText());
-                    catalogue.replace("Aggregates", aggregatesList);
-                } else if (category.getValue().equals("Turf")) {
-                    Item t = turfList.createItem(name.getText());
-                    turfList.deleteItem(name.getText());
-                    catalogue.replace("Turf", turfList);
-                }
+                deleteOperation(name, category);
                 showActionPopup(action.getValue(), popup, name, category);
 
             } else if (action.getValue().equals("Search")) {
-                i = findItem(name.getText());
-                DisplaySearchItem.display("Search Results", i.toString());
+                try {
+                    i = findItem(name.getText());
+                    DisplaySearchItem.display("Search Results", i.toString());
+                } catch(NullPointerException n) {
+                    popup.setTextFill(Color.RED);
+                    popup.setText("Item not found.");
+                    Task<Void> sleeper = new Task<Void>() {
+                        @Override
+                        protected Void call() throws Exception {
+                            try {
+                                Thread.sleep(3000);
+                            } catch (InterruptedException e) {
+                            }
+                            return null;
+                        }
+                    };
+
+                    sleeper.setOnSucceeded(new EventHandler<WorkerStateEvent>() {
+                        @Override
+                        public void handle(WorkerStateEvent event) {
+                            popup.setText("");
+                        }
+                    });
+                    new Thread(sleeper).start();
+                }
+
             }
             else {
                 System.out.println("Action not recognized.");
@@ -229,6 +197,80 @@ public class InventoryCatalogue extends Application {
 
     }
 
+    // MODIFIES: this,
+    // EFFECTS: deletes item from its category list
+    private void deleteOperation(TextField name, ComboBox category) {
+        if (category.getValue().equals("Aggregates")) {
+            Item a = aggregatesList.createItem(name.getText());
+            aggregatesList.deleteItem(name.getText());
+            catalogue.replace("Aggregates", aggregatesList);
+        } else if (category.getValue().equals("Turf")) {
+            Item t = turfList.createItem(name.getText());
+            turfList.deleteItem(name.getText());
+            catalogue.replace("Turf", turfList);
+        }
+    }
+
+    // MODIFIES: this
+    // EFFECTS: performs removal of units from specified item
+    private void removeOperation(TextField name, ComboBox category, TextField amount) {
+        if (category.getValue().equals("Aggregates")) {
+            Item a = aggregatesList.createItem(name.getText());
+
+            try {
+                a.performRemoval(amount.getText());
+            } catch (NegativeNumberException e1) {
+                System.out.println("Please enter a valid amount.");
+            } catch (NumberFormatException nfe) {
+                System.out.println("Please enter a valid number.");
+            }
+            catalogue.replace("Aggregates", aggregatesList);
+
+        } else if (category.getValue().equals("Turf")) {
+            Item t = turfList.createItem(name.getText());
+            try {
+                t.performRemoval(amount.getText());
+            } catch (NegativeNumberException e1) {
+                System.out.println("Please enter a valid amount.");
+            } catch (NumberFormatException nfe) {
+                System.out.println("Please enter a valid number.");
+            }
+            catalogue.replace("Turf", turfList);
+        }
+    }
+
+    // MODIFIES: this, popup
+    // EFFECTS: performs create and/or add on specified item
+    private void addOperation(Label popup, ComboBox action, TextField name, ComboBox category, TextField amount) {
+        if (category.getValue().equals("Aggregates")) {
+            Item a = aggregatesList.createItem(name.getText());
+            a.setCategory("Aggregates");
+            try {
+                a.performAdd(amount.getText());
+            } catch (NegativeNumberException ie) {
+                System.out.println("Please enter a valid amount");
+            } catch (NumberFormatException nfe) {
+                System.out.println("Please enter a number");
+            }
+            catalogue.replace("Aggregates", aggregatesList);
+            showActionPopup(action.getValue(), popup, name, category);
+
+        } else if (category.getValue().equals("Turf")) {
+            Item t = turfList.createItem(name.getText());
+            t.setCategory("Turf");
+            try {
+                t.performAdd(amount.getText());
+            } catch (NegativeNumberException ie) {
+                System.out.println("Please enter a valid amount");
+            } catch (NumberFormatException nfe) {
+                System.out.println("Please enter a number");
+            }
+            catalogue.replace("Turf", turfList);
+            showActionPopup(action.getValue(), popup, name, category);
+        }
+    }
+
+    // MODIFIES: this, popup
     // EFFECTS: Displays a popup confirming that a user actions was completed
     private void showActionPopup(Object action, Label popup, TextField name, ComboBox category) {
         String act = action.toString();
