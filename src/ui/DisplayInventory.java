@@ -10,10 +10,15 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import model.ListOfItems;
+
+import java.util.HashMap;
+import java.util.List;
 
 public class DisplayInventory {
 
-    public static void display(String title, String aggregates, String turf) {
+    // EFFECTS: displays window with inventory
+    public static void display(String title, HashMap<String, ListOfItems> catalogue) {
         Stage window = new Stage();
 
         //Block events to other windows
@@ -21,19 +26,31 @@ public class DisplayInventory {
         window.setTitle(title);
         window.setMinWidth(250);
 
+        boolean c = true;
+        if (!catalogue.containsKey("Aggregates")) {
+            c = false;
+        }
+
+        if (!catalogue.containsKey("Turf")) {
+            c = false;
+        }
+
         Label h1 = new Label();
         h1.setText("Aggregates");
         h1.setFont(Font.font("Verdana", FontWeight.findByName("bold"), 13));
-        Label label = new Label();
-        label.setText(aggregates);
-        label.setFont(Font.font("Verdana", 13));
 
         Label h2 = new Label();
         h2.setText("Turf");
         h2.setFont(Font.font("Verdana", FontWeight.findByName("bold"), 13));
-        Label label2 = new Label();
-        label2.setFont(Font.font("Verdana", 13));
-        label2.setText(turf);
+
+        Label label = new Label("");
+        Label label2 = new Label("");
+        if (c) {
+            label.setFont(Font.font("Verdana", 13));
+            label.setText(catalogue.get("Aggregates").toString());
+            label2.setFont(Font.font("Verdana", 13));
+            label2.setText(catalogue.get("Turf").toString());
+        }
 
         Button closeButton = new Button("Close");
         closeButton.setOnAction(e -> window.close());

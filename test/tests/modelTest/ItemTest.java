@@ -1,6 +1,5 @@
-package tests;
+package tests.modelTest;
 
-import exceptions.CapacityReachedException;
 import exceptions.NegativeNumberException;
 import model.Item;
 import org.junit.jupiter.api.Test;
@@ -38,7 +37,7 @@ public class ItemTest {
         Item a = new Item();
         try {
             a.performAdd("10");
-        } catch (NegativeNumberException | CapacityReachedException e) {
+        } catch (NegativeNumberException e) {
             e.printStackTrace();
         }
         assertEquals(10, a.getAmount());
@@ -50,7 +49,7 @@ public class ItemTest {
         Item a = new Item();
         try {
             a.performAdd("10");
-        } catch (NegativeNumberException | CapacityReachedException e) {
+        } catch (NegativeNumberException e) {
             e.printStackTrace();
         }
         assertEquals(10, a.getAmount());

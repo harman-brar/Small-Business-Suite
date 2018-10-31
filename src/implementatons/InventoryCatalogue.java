@@ -1,7 +1,10 @@
 package implementatons;
 
-import category_lists.AggregatesList;
-import category_lists.TurfList;
+import javafx.concurrent.Task;
+import javafx.concurrent.WorkerStateEvent;
+import javafx.event.EventHandler;
+import javafx.scene.paint.Color;
+import model.ListOfItems;
 import exceptions.NegativeNumberException;
 import javafx.application.Application;
 import javafx.collections.FXCollections;
@@ -17,11 +20,14 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import model.Item;
-import model.ListOfItems;
 import ui.DisplayInventory;
 import ui.DisplaySearchItem;
 
 import java.io.*;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import static javafx.scene.paint.Color.rgb;
 
@@ -30,13 +36,16 @@ public class InventoryCatalogue extends Application {
     private Stage window;
     private Scene scene1, scene2;
     private Item i;
-    private boolean append;
+    private boolean append, preloaded;
+    private HashMap<String, ListOfItems> catalogue;
 
 
     public InventoryCatalogue() {
-        aggregatesList = new AggregatesList();
-        turfList = new TurfList();
+        catalogue = new HashMap<String, ListOfItems>();
+        aggregatesList = new ListOfItems();
+        turfList = new ListOfItems();
         append = true;
+        preloaded = false;
     }
 
     @Override
@@ -46,6 +55,10 @@ public class InventoryCatalogue extends Application {
         // --------------------------- EDIT INVENTORY SCENE 1 -------------------------------- \\
 
 
+        // Popup label
+        Label popup = new Label("");
+        popup.setFont(Font.font("Verdana", 15));
+        popup.setTextFill(Color.GREEN);
         // Title
         Label label1 = new Label("Edit Inventory");
         label1.setFont(Font.font ("Verdana", 30));
@@ -55,15 +68,23 @@ public class InventoryCatalogue extends Application {
         Button loadInventory = new Button("Load");
         loadInventory.setOnAction(event -> {
             try {
-                LoadSave.load(aggregatesList, "aggregateOutput.txt");
-                append = false;
+                if (!preloaded) {
+                    LoadSave.load(aggregatesList, "aggregateOutput.txt");
+                    catalogue.put("Aggregates", aggregatesList);
+                    append = false;
+                    showActionPopup((Object) "Load", popup, null, null);
+                }
             } catch (IOException e) {
                 e.printStackTrace();
             }
 
             try {
+                if (!preloaded) {
                 LoadSave.load(turfList, "turfOutput.txt");
+                catalogue.put("Turf", turfList);
                 append = false;
+                preloaded = true;
+                }
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -118,6 +139,9 @@ public class InventoryCatalogue extends Application {
                     } catch (NumberFormatException nfe) {
                         System.out.println("Please enter a number");
                     }
+                    catalogue.replace("Aggregates", aggregatesList);
+                    showActionPopup(action.getValue(), popup, name, category);
+
                 } else if (category.getValue().equals("Turf")) {
                     Item t = turfList.createItem(name.getText());
                     t.setCategory("Turf");
@@ -128,7 +152,8 @@ public class InventoryCatalogue extends Application {
                     } catch (NumberFormatException nfe) {
                         System.out.println("Please enter a number");
                     }
-
+                    catalogue.replace("Turf", turfList);
+                    showActionPopup(action.getValue(), popup, name, category);
                 }
             }
             else if (action.getValue().equals("Remove")) {
@@ -142,7 +167,7 @@ public class InventoryCatalogue extends Application {
                     } catch (NumberFormatException nfe) {
                         System.out.println("Please enter a valid number.");
                     }
-
+                    catalogue.replace("Aggregates", aggregatesList);
 
                 } else if (category.getValue().equals("Turf")) {
                     Item t = turfList.createItem(name.getText());
@@ -153,17 +178,23 @@ public class InventoryCatalogue extends Application {
                     } catch (NumberFormatException nfe) {
                         System.out.println("Please enter a valid number.");
                     }
-
+                    catalogue.replace("Turf", turfList);
                 }
+
+                showActionPopup(action.getValue(), popup, name, category);
             }
             else if (action.getValue().equals("Delete")) {
                 if (category.getValue().equals("Aggregates")) {
                     Item a = aggregatesList.createItem(name.getText());
                     aggregatesList.deleteItem(name.getText());
+                    catalogue.replace("Aggregates", aggregatesList);
                 } else if (category.getValue().equals("Turf")) {
                     Item t = turfList.createItem(name.getText());
                     turfList.deleteItem(name.getText());
+                    catalogue.replace("Turf", turfList);
                 }
+                showActionPopup(action.getValue(), popup, name, category);
+
             } else if (action.getValue().equals("Search")) {
                 i = findItem(name.getText());
                 DisplaySearchItem.display("Search Results", i.toString());
@@ -177,12 +208,13 @@ public class InventoryCatalogue extends Application {
         // See Inventory Button
         Button doneButton = new Button("See Inventory");
         doneButton.setOnAction((ActionEvent event) -> {
-            DisplayInventory.display("Inventory", aggregatesList.toString(), turfList.toString());
+            System.out.println(catalogue);
+            DisplayInventory.display("Inventory", catalogue);
         });
 
         //Layout 1 - children laid out in vertical column
         VBox layout1 = new VBox(20);
-        layout1.getChildren().addAll(label1, loadInventory, action, name, category, amount, button1, doneButton);
+        layout1.getChildren().addAll(popup, label1, loadInventory, action, name, category, amount, button1, doneButton);
         layout1.setAlignment(Pos.CENTER);
         scene1 = new Scene(layout1, 350, 400);
 
@@ -196,6 +228,42 @@ public class InventoryCatalogue extends Application {
         window.show();
 
     }
+
+    // EFFECTS: Displays a popup confirming that a user actions was completed
+    private void showActionPopup(Object action, Label popup, TextField name, ComboBox category) {
+        String act = action.toString();
+        if (act.equals("Add")) {
+            popup.setText("'" + name.getText() + "'" + " added to " + category.getValue() + " List");
+        }
+        else if (act.equals("Remove")) {
+            popup.setText("Units removed from " + "'" + name.getText() + "'" + " in " + category.getValue() + " List");
+        }
+        else if (act.equals("Delete")) {
+            popup.setText("'" + name.getText() + "'" + " deleted from " + category.getValue() + " List");
+        }
+        else if (act.equals("Load")) {
+            popup.setText("Inventory loaded");
+        }
+        Task<Void> sleeper = new Task<Void>() {
+            @Override
+            protected Void call() throws Exception {
+                try {
+                    Thread.sleep(3000);
+                } catch (InterruptedException e) {
+                }
+                return null;
+            }
+        };
+
+        sleeper.setOnSucceeded(new EventHandler<WorkerStateEvent>() {
+            @Override
+            public void handle(WorkerStateEvent event) {
+                popup.setText("");
+            }
+        });
+        new Thread(sleeper).start();
+    }
+
     // REQUIRES: item is in one and only one of the category list
     // MODIFIES: this
     // EFFECTS: finds item with name text

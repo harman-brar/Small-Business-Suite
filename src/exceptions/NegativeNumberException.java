@@ -1,4 +1,4 @@
 package exceptions;
 
-public class NegativeNumberException extends InvalidQuantityException {
+public class NegativeNumberException extends Exception {
 }

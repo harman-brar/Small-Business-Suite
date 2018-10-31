@@ -1,8 +1,9 @@
 package model;
 
-import exceptions.CapacityReachedException;
-import exceptions.InvalidQuantityException;
 import exceptions.NegativeNumberException;
+
+import java.util.Collection;
+import java.util.HashSet;
 
 import static java.lang.Integer.parseInt;
 
@@ -10,12 +11,32 @@ public class Item {
     private String name;
     private int amount;
     private String category;
+    private Collection<Manufacturer> producers;
 
-    // EFFECTS: constructs an Aggregate with no name and amount 0
+    // EFFECTS: constructs an item
     public Item() {
         name = "";
         amount = 0;
         category= "";
+        producers = new HashSet<Manufacturer>();
+    }
+
+    // MODIFIES: this, m
+    // EFFECTS: adds m to list of manufacturers that produce this
+    public void addManufacturer(Manufacturer m) {
+        if (!producers.contains(m)) {
+            producers.add(m);
+            m.addProduct(this);
+        }
+    }
+
+    // MODIFIES: this, m
+    // EFFECTS: removes m from list of manufacturers that produce this
+    public void removeManufacturer(Manufacturer m) {
+        if (producers.contains(m)) {
+            producers.remove(m);
+            m.removeProduct(this);
+        }
     }
 
     // EFFECTS: returns name of item
@@ -59,13 +80,10 @@ public class Item {
 
     // MODIFIES: this
     // EFFECTS: adds amount to amount of this
-    public void performAdd(String amount) throws NegativeNumberException, CapacityReachedException {
+    public void performAdd(String amount) throws NegativeNumberException{
         int localAmount = parseInt(amount);
         if (localAmount < 0) {
             throw new NegativeNumberException();
-        }
-        if (localAmount > 100) {
-            throw new CapacityReachedException();
         }
         this.amount += localAmount;
         System.out.println(localAmount + " units added to " + this.name);

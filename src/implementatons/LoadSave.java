@@ -1,7 +1,7 @@
 package implementatons;
 
-import model.Item;
 import model.ListOfItems;
+import model.Item;
 
 import java.io.FileWriter;
 import java.io.IOException;
@@ -40,7 +40,7 @@ public class LoadSave {
         }
     }
 
-    private static ArrayList<String> splitOnSpace(String line){
+    public static ArrayList<String> splitOnSpace(String line){
         String[] splits = line.split(" ");
         return new ArrayList<>(Arrays.asList(splits));
     }
