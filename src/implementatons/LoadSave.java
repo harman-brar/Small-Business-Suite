@@ -14,9 +14,9 @@ import java.util.List;
 
 public class LoadSave {
 
-    static void save(String listToString, String file, Boolean append) throws IOException {
+    static void save(String listToString, String file) throws IOException {
         List<String> lines = new ArrayList<>();
-        PrintWriter writer = new PrintWriter(new FileWriter(file, append));
+        PrintWriter writer = new PrintWriter(new FileWriter(file, false));
         lines.add(listToString);
         for (String line : lines){
             writer.println(line);

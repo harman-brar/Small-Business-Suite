@@ -6,3 +6,4 @@ Gatess 0
 nini 20
 gugu 4
 Puree 22
+Droopy 20
