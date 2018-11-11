@@ -43,13 +43,20 @@ public class DisplayInventory {
         h2.setText("Turf");
         h2.setFont(Font.font("Verdana", FontWeight.findByName("bold"), 13));
 
+        Label h3 = new Label();
+        h3.setText("Pavers");
+        h3.setFont(Font.font("Verdana", FontWeight.findByName("bold"), 13));
+
         Label label = new Label("");
         Label label2 = new Label("");
+        Label label3 = new Label("");
         if (c) {
             label.setFont(Font.font("Verdana", 13));
             label.setText(catalogue.get("Aggregates").toString());
             label2.setFont(Font.font("Verdana", 13));
             label2.setText(catalogue.get("Turf").toString());
+            label3.setFont(Font.font("Verdana", 13));
+            label3.setText(catalogue.get("Pavers").toString());
         }
 
         Button closeButton = new Button("Close");
@@ -61,8 +68,11 @@ public class DisplayInventory {
         VBox layout2 = new VBox(10);
         layout2.getChildren().addAll(h2, label2);
 
+        VBox layout3 = new VBox(10);
+        layout3.getChildren().addAll(h3, label3);
+
         HBox wrapper = new HBox(10);
-        wrapper.getChildren().addAll(layout, layout2);
+        wrapper.getChildren().addAll(layout, layout2, layout3);
 
         VBox container = new VBox(10);
         container.getChildren().addAll(wrapper, closeButton);

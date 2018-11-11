@@ -32,10 +32,10 @@ public class LoadSave {
                 ArrayList<String> partsOfLine = splitOnSpace(line);
                 Item l = new Item();
                 l.setName(partsOfLine.get(0));
-                l.setAmount(partsOfLine.get(1));
+                l.setAmount(partsOfLine.get(2));
                 list.insertItem(l);
                 System.out.print("Name: " + partsOfLine.get(0) + " ");
-                System.out.println("Amount: " + partsOfLine.get(1));
+                System.out.println("Amount: " + partsOfLine.get(2));
             }
         }
     }

@@ -75,7 +75,7 @@ public class Item {
 
     // EFFECTS: specifies the order in which to return name and current amount of item as a string
     public String toString() {
-        return name + " " + amount;
+        return name + " | " + amount;
     }
 
     // MODIFIES: this

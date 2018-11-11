@@ -20,7 +20,7 @@ public class ListOfItems {
     // EFFECTS: adds Aggregate a to aggregateList then prints that a is added
     public void insertItem(Item i) {
         thisList.add(i);
-        System.out.println("Added item " + i.getName() + " to Aggregates list");
+        System.out.println("Added item " + i.getName() + " to " + i.getCategory() + " list");
     }
 
     public Item getItem(String nameOfItem) {
@@ -54,7 +54,8 @@ public class ListOfItems {
             System.out.println(nameOfItem + " removed from Aggregates List");
         }
         else {
-            System.out.println("The item you are trying to delete does not exist.");
+            //System.out.println("The item you are trying to delete does not exist.");
+            throw new NullPointerException();
         }
     }
 
@@ -74,7 +75,7 @@ public class ListOfItems {
     }
 
     // EFFECTS: returns true if item with given name is already in the list
-    private boolean contains(String nameOfItem) {
+    public boolean contains(String nameOfItem) {
         boolean isContains = false;
         index = 0;
         for (Item a: thisList) {

@@ -1,5 +1,6 @@
 package implementatons;
 
+import com.sun.xml.internal.bind.v2.runtime.reflect.Lister;
 import javafx.concurrent.Task;
 import javafx.concurrent.WorkerStateEvent;
 import javafx.event.EventHandler;
@@ -24,34 +25,37 @@ import ui.DisplayInventory;
 import ui.DisplaySearchItem;
 
 import java.io.*;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Timer;
-import java.util.TimerTask;
+import java.util.*;
 
 import static javafx.scene.paint.Color.rgb;
 
 public class InventoryCatalogue extends Application {
-    private ListOfItems aggregatesList, turfList;
+    private ListOfItems aggregatesList, turfList, paversList;
+    private ArrayList<ListOfItems> itemsList;
     private Stage window;
-    private Scene scene1, scene2;
     private Item i;
-    private boolean append, preloaded;
     private HashMap<String, ListOfItems> catalogue;
 
 
+    // EFFECTS: constructs inventory catalogue with various loaded item lists
     public InventoryCatalogue() {
         catalogue = new HashMap<String, ListOfItems>();
         aggregatesList = new ListOfItems();
         turfList = new ListOfItems();
-        append = true;
-        preloaded = false;
+        paversList = new ListOfItems();
+
+        itemsList = new ArrayList<ListOfItems>();
+        itemsList.add(aggregatesList);
+        itemsList.add(turfList);
+        itemsList.add(paversList);
 
         try {
             LoadSave.load(aggregatesList, "aggregateOutput.txt");
             catalogue.put("Aggregates", aggregatesList);
             LoadSave.load(turfList, "turfOutput.txt");
             catalogue.put("Turf", turfList);
+            LoadSave.load(paversList, "paverOutput.txt");
+            catalogue.put("Pavers", paversList);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -95,7 +99,8 @@ public class InventoryCatalogue extends Application {
         ObservableList<String> categories =
                 FXCollections.observableArrayList(
                         "Aggregates",
-                        "Turf"
+                        "Turf",
+                        "Pavers"
                 );
         // Category dropdown
         final ComboBox category = new ComboBox(categories);
@@ -115,40 +120,18 @@ public class InventoryCatalogue extends Application {
                 addOperation(popup, action, name, category, amount);
             }
             else if (action.getValue().equals("Remove")) {
-                removeOperation(name, category, amount);
-                showActionPopup(action.getValue(), popup, name, category);
+                removeOperation(action.getValue().toString(), popup, name, category, amount);
             }
             else if (action.getValue().equals("Delete")) {
-                deleteOperation(name, category);
-                showActionPopup(action.getValue(), popup, name, category);
+                deleteOperation(action, popup, name, category);
 
             } else if (action.getValue().equals("Search")) {
                 try {
-                    i = findItem(name.getText());
+                    i = findItem(name.getText(), catalogue);
                     DisplaySearchItem.display("Search Results", i.toString());
                 } catch(NullPointerException n) {
-                    popup.setTextFill(Color.RED);
-                    popup.setText("Item not found.");
-                    Task<Void> sleeper = new Task<Void>() {
-                        @Override
-                        protected Void call() throws Exception {
-                            try {
-                                Thread.sleep(3000);
-                            } catch (InterruptedException e) {
-                            }
-                            return null;
-                        }
-                    };
-
-                    sleeper.setOnSucceeded(new EventHandler<WorkerStateEvent>() {
-                        @Override
-                        public void handle(WorkerStateEvent event) {
-                            popup.setText("");
-                        }
-                    });
-                    new Thread(sleeper).start();
+                    showActionPopup("DNE", popup, null, null);
                 }
-
             }
             else {
                 System.out.println("Action not recognized.");
@@ -167,7 +150,7 @@ public class InventoryCatalogue extends Application {
         VBox layout1 = new VBox(20);
         layout1.getChildren().addAll(popup, label1, action, name, category, amount, button1, doneButton);
         layout1.setAlignment(Pos.CENTER);
-        scene1 = new Scene(layout1, 350, 400);
+        Scene scene1 = new Scene(layout1, 350, 400);
 
         // --------------------------- WINDOW CONFIGURATION -------------------------------- \\
 
@@ -182,36 +165,32 @@ public class InventoryCatalogue extends Application {
 
     // MODIFIES: this,
     // EFFECTS: deletes item from its category list
-    private void deleteOperation(TextField name, ComboBox category) {
-        if (category.getValue().equals("Aggregates")) {
-            Item a = aggregatesList.createItem(name.getText());
-            aggregatesList.deleteItem(name.getText());
-            catalogue.replace("Aggregates", aggregatesList);
-        } else if (category.getValue().equals("Turf")) {
-            Item t = turfList.createItem(name.getText());
-            turfList.deleteItem(name.getText());
-            catalogue.replace("Turf", turfList);
+    private void deleteOperation(ComboBox action, Label popup, TextField name, ComboBox category) {
+        ListOfItems mappedList = catalogue.get(category.getValue().toString());
+        try {
+            mappedList.deleteItem(name.getText());
+            showActionPopup("Delete", popup, name, category.getValue().toString());
+        } catch (NullPointerException e) {
+            showActionPopup("DNE", popup, null, null);
         }
     }
 
     // MODIFIES: this
     // EFFECTS: performs removal of units from specified item
-    private void removeOperation(TextField name, ComboBox category, TextField amount) {
+    private void removeOperation(String action, Label popup, TextField name, ComboBox category, TextField amount) {
         try {
-            if (category.getValue().equals("Aggregates")) {
-                 Item i = aggregatesList.createItem(name.getText());
-                 i.performRemoval(amount.getText());
-                 catalogue.replace("Aggregates", aggregatesList);
-
-            } else if (category.getValue().equals("Turf")) {
-                Item i = turfList.createItem(name.getText());
+            ListOfItems mappedList = catalogue.get(category.getValue().toString());
+            i = mappedList.createItem(name.getText());
+            if (i.getAmount() - Integer.parseInt(amount.getText()) < 0) {
+                throw new NumberFormatException();
+            } else {
                 i.performRemoval(amount.getText());
-                catalogue.replace("Turf", turfList);
-                }
-            } catch (NegativeNumberException e1) {
-                System.out.println("Please enter a valid amount.");
-            } catch (NumberFormatException nfe) {
-                System.out.println("Please enter a valid number.");
+                catalogue.replace(i.getCategory(), mappedList);
+                showActionPopup(action, popup, name, category.getValue().toString());
+            }
+
+        } catch (NegativeNumberException | NumberFormatException e1) {
+                showActionPopup("Error", popup, null, null);
         }
     }
 
@@ -219,20 +198,11 @@ public class InventoryCatalogue extends Application {
     // EFFECTS: performs create and/or add on specified item
     private void addOperation(Label popup, ComboBox action, TextField name, ComboBox category, TextField amount) {
         try {
-            if (category.getValue().equals("Aggregates")) {
-                Item i = aggregatesList.createItem(name.getText());
-                i.setCategory("Aggregates");
-                i.performAdd(amount.getText());
-                catalogue.replace("Aggregates", aggregatesList);
-                showActionPopup(action.getValue(), popup, name, category);
-
-            } else if (category.getValue().equals("Turf")) {
-                Item i = turfList.createItem(name.getText());
-                i.setCategory("Turf");
-                i.performAdd(amount.getText());
-                catalogue.replace("Turf", turfList);
-                showActionPopup(action.getValue(), popup, name, category);
-            }
+            ListOfItems mappedList = catalogue.get(category.getValue().toString());
+            i = mappedList.createItem(name.getText());
+            i.performAdd(amount.getText());
+            showActionPopup(action.getValue().toString(), popup, name, category.getValue().toString());
+            catalogue.replace(i.getCategory(), mappedList);
         } catch (NegativeNumberException ie) {
             System.out.println("Please enter a valid amount");
         } catch (NumberFormatException nfe) {
@@ -242,19 +212,27 @@ public class InventoryCatalogue extends Application {
 
     // MODIFIES: this, popup
     // EFFECTS: Displays a popup confirming that a user actions was completed
-    private void showActionPopup(Object action, Label popup, TextField name, ComboBox category) {
-        String act = action.toString();
-        if (act.equals("Add")) {
-            popup.setText("'" + name.getText() + "'" + " added to " + category.getValue() + " List");
+    private void showActionPopup(String action, Label popup, TextField name, String category) {
+        if (action.equals("Add")) {
+            popup.setText("'" + name.getText() + "'" + " added to " + category + " List");
         }
-        else if (act.equals("Remove")) {
-            popup.setText("Units removed from " + "'" + name.getText() + "'" + " in " + category.getValue() + " List");
+        else if (action.equals("Remove")) {
+            popup.setText("Units removed from " + "'" + name.getText() + "'" + " in " + category + " List");
         }
-        else if (act.equals("Delete")) {
-            popup.setText("'" + name.getText() + "'" + " deleted from " + category.getValue() + " List");
+        else if (action.equals("Delete")) {
+            popup.setText("'" + name.getText() + "'" + " deleted from " + category + " List");
         }
-        else if (act.equals("Load")) {
-            popup.setText("Inventory loaded");
+        else if (action.equals("Error")) {
+            popup.setTextFill(Color.RED);
+            popup.setText("Not enough units of item to remove.");
+        }
+        else if (action.equals("DNE")) {
+            popup.setTextFill(Color.RED);
+            popup.setText("Item does not exist.");
+        }
+        else {
+            popup.setTextFill(Color.RED);
+            popup.setText("An error occurred.");
         }
         Task<Void> sleeper = new Task<Void>() {
             @Override
@@ -271,6 +249,7 @@ public class InventoryCatalogue extends Application {
             @Override
             public void handle(WorkerStateEvent event) {
                 popup.setText("");
+                popup.setTextFill(Color.GREEN);
             }
         });
         new Thread(sleeper).start();
@@ -278,12 +257,13 @@ public class InventoryCatalogue extends Application {
 
     // REQUIRES: item is in one and only one of the category list
     // MODIFIES: this
-    // EFFECTS: finds item with name text
-    private Item findItem(String text) {
-        if (aggregatesList.getItem(text) != null) {
-            i = aggregatesList.getItem(text);
-        } else if (turfList.getItem(text) != null) {
-            i = turfList.getItem(text);
+    // EFFECTS: finds item with name name
+    private Item findItem(String name, HashMap<String, ListOfItems> c) {
+        for (ListOfItems l : itemsList) {
+            if (l.contains(name)) {
+                i = l.getItem(name);
+                break;
+            }
         }
         return i;
     }
@@ -293,11 +273,8 @@ public class InventoryCatalogue extends Application {
     private void closeOperation() {
         try {
             LoadSave.save(aggregatesList.toString(), "aggregateOutput.txt");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        try {
             LoadSave.save(turfList.toString(), "turfOutput.txt");
+            LoadSave.save(paversList.toString(), "paverOutput.txt");
         } catch (IOException e) {
             e.printStackTrace();
         }
