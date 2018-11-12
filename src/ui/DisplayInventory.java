@@ -26,15 +26,6 @@ public class DisplayInventory {
         window.setTitle(title);
         window.setMinWidth(250);
 
-        boolean c = true;
-        if (!catalogue.containsKey("Aggregates")) {
-            c = false;
-        }
-
-        if (!catalogue.containsKey("Turf")) {
-            c = false;
-        }
-
         Label h1 = new Label();
         h1.setText("Aggregates");
         h1.setFont(Font.font("Verdana", FontWeight.findByName("bold"), 13));
@@ -50,14 +41,12 @@ public class DisplayInventory {
         Label label = new Label("");
         Label label2 = new Label("");
         Label label3 = new Label("");
-        if (c) {
             label.setFont(Font.font("Verdana", 13));
             label.setText(catalogue.get("Aggregates").toString());
             label2.setFont(Font.font("Verdana", 13));
             label2.setText(catalogue.get("Turf").toString());
             label3.setFont(Font.font("Verdana", 13));
             label3.setText(catalogue.get("Pavers").toString());
-        }
 
         Button closeButton = new Button("Close");
         closeButton.setOnAction(e -> window.close());

@@ -67,11 +67,11 @@ public class InventoryCatalogue extends Application {
 
         // --------------------------- EDIT INVENTORY SCENE 1 -------------------------------- \\
 
-
         // Popup label
         Label popup = new Label("");
         popup.setFont(Font.font("Verdana", 15));
         popup.setTextFill(Color.GREEN);
+
         // Title
         Label label1 = new Label("Edit Inventory");
         label1.setFont(Font.font ("Verdana", 30));
