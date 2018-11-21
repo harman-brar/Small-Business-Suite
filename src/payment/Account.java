@@ -1,9 +1,6 @@
 package payment;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 public class Account implements Observer {
     private Set<Invoice> activeInvoices;
@@ -45,8 +42,9 @@ public class Account implements Observer {
     }
 
     @Override
-    public void update(int invoiceNo) {
-        removeInvoice(invoiceNo);
-        System.out.println("Invoice " + invoiceNo + " paid.");
+    public void update(Observable o, Object arg) {
+        int invNumber = (int) arg;
+        removeInvoice(invNumber);
+        System.out.println("Invoice " + invNumber + " paid.");
     }
 }

@@ -4,9 +4,10 @@ import model.Item;
 
 import java.util.Date;
 import java.util.HashSet;
+import java.util.Observable;
 import java.util.Set;
 
-public class Invoice extends Subject {
+public class Invoice extends Observable {
     private Date date;
     private Account acc;
     private String address;
@@ -22,6 +23,7 @@ public class Invoice extends Subject {
         this.invNumber = invNumber;
         paid = false;
         this.items = new HashSet<Item>();
+        addObserver(acc);
     }
 
     // MODIFIES: this
@@ -42,6 +44,7 @@ public class Invoice extends Subject {
     // EFFECTS: changes invoice status to paid
     public void payInvoice() {
         paid = true;
+        setChanged();
         notifyObservers(invNumber);
 
     }

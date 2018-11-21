@@ -2,12 +2,13 @@ package model;
 
 import model.Item;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-public class ListOfItems {
+public class ListOfItems implements Serializable {
     private List<Item> thisList;
     private int index;
     private Item item;
@@ -54,7 +55,6 @@ public class ListOfItems {
             System.out.println(nameOfItem + " removed from Aggregates List");
         }
         else {
-            //System.out.println("The item you are trying to delete does not exist.");
             throw new NullPointerException();
         }
     }
@@ -62,10 +62,11 @@ public class ListOfItems {
     // MODIFIES: this
     // EFFECTS: creates new aggregate and adds it to list if it is not already there, otherwise returns index
     //          of the existing aggregate
-    public Item createItem(String nameOfItem) {
+    public Item createItem(String nameOfItem, String category) {
         if (!contains(nameOfItem)) {
             Item itemToAdd = new Item();
             itemToAdd.setName(nameOfItem);
+            itemToAdd.setCategory(category);
             insertItem(itemToAdd);
 
             return itemToAdd;
@@ -88,6 +89,11 @@ public class ListOfItems {
             }
         }
         return isContains;
+    }
+
+    public Item get(int i) {
+        Item item = thisList.get(i);
+        return item;
     }
 
 }

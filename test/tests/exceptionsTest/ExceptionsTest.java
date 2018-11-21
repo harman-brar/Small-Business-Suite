@@ -42,9 +42,7 @@ public class ExceptionsTest {
         try {
             a.performAdd("5");
             System.out.println("pass");
-        } catch (NumberFormatException e) {
-            fail("Unexpected exception");
-        } catch (NegativeNumberException e) {
+        } catch (NumberFormatException | NegativeNumberException e) {
             fail("Unexpected exception");
         }
 

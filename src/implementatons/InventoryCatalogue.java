@@ -1,9 +1,9 @@
 package implementatons;
 
-import com.sun.xml.internal.bind.v2.runtime.reflect.Lister;
 import javafx.concurrent.Task;
 import javafx.concurrent.WorkerStateEvent;
 import javafx.event.EventHandler;
+import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
 import model.ListOfItems;
 import exceptions.NegativeNumberException;
@@ -21,6 +21,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import model.Item;
+import ui.DisplayAccounts;
 import ui.DisplayInventory;
 import ui.DisplaySearchItem;
 
@@ -32,14 +33,14 @@ import static javafx.scene.paint.Color.rgb;
 public class InventoryCatalogue extends Application {
     private ListOfItems aggregatesList, turfList, paversList;
     private ArrayList<ListOfItems> itemsList;
-    private Stage window;
+    public static Stage window;
+    public static Scene scene1;
     private Item i;
     private HashMap<String, ListOfItems> catalogue;
 
 
     // EFFECTS: constructs inventory catalogue with various loaded item lists
     public InventoryCatalogue() {
-        catalogue = new HashMap<String, ListOfItems>();
         aggregatesList = new ListOfItems();
         turfList = new ListOfItems();
         paversList = new ListOfItems();
@@ -50,12 +51,7 @@ public class InventoryCatalogue extends Application {
         itemsList.add(paversList);
 
         try {
-            LoadSave.load(aggregatesList, "aggregateOutput.txt");
-            catalogue.put("Aggregates", aggregatesList);
-            LoadSave.load(turfList, "turfOutput.txt");
-            catalogue.put("Turf", turfList);
-            LoadSave.load(paversList, "paverOutput.txt");
-            catalogue.put("Pavers", paversList);
+            catalogue = LoadSave.load();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -146,11 +142,20 @@ public class InventoryCatalogue extends Application {
             DisplayInventory.display("Inventory", catalogue);
         });
 
+        HBox aux = new HBox(235);
+        Scene scene2 = DisplayAccounts.display();
+
+        Button accButton = new Button("Accounts");
+        accButton.setOnAction((ActionEvent event) -> {
+            window.setScene(scene2);
+        });
+        Button printButton = new Button("Print");
+        aux.getChildren().addAll(accButton, printButton);
         //Layout 1 - children laid out in vertical column
         VBox layout1 = new VBox(20);
-        layout1.getChildren().addAll(popup, label1, action, name, category, amount, button1, doneButton);
+        layout1.getChildren().addAll(popup, label1, action, name, category, amount, button1, doneButton, aux);
         layout1.setAlignment(Pos.CENTER);
-        Scene scene1 = new Scene(layout1, 350, 400);
+        scene1 = new Scene(layout1, 350, 400);
 
         // --------------------------- WINDOW CONFIGURATION -------------------------------- \\
 
@@ -180,7 +185,7 @@ public class InventoryCatalogue extends Application {
     private void removeOperation(String action, Label popup, TextField name, ComboBox category, TextField amount) {
         try {
             ListOfItems mappedList = catalogue.get(category.getValue().toString());
-            i = mappedList.createItem(name.getText());
+            i = mappedList.createItem(name.getText(), category.getValue().toString());
             if (i.getAmount() - Integer.parseInt(amount.getText()) < 0) {
                 throw new NumberFormatException();
             } else {
@@ -199,7 +204,7 @@ public class InventoryCatalogue extends Application {
     private void addOperation(Label popup, ComboBox action, TextField name, ComboBox category, TextField amount) {
         try {
             ListOfItems mappedList = catalogue.get(category.getValue().toString());
-            i = mappedList.createItem(name.getText());
+            i = mappedList.createItem(name.getText(), category.getValue().toString());
             i.performAdd(amount.getText());
             showActionPopup(action.getValue().toString(), popup, name, category.getValue().toString());
             catalogue.replace(i.getCategory(), mappedList);
@@ -272,9 +277,7 @@ public class InventoryCatalogue extends Application {
     // EFFECTS: saves inventory and then closes program window
     private void closeOperation() {
         try {
-            LoadSave.save(aggregatesList.toString(), "aggregateOutput.txt");
-            LoadSave.save(turfList.toString(), "turfOutput.txt");
-            LoadSave.save(paversList.toString(), "paverOutput.txt");
+            LoadSave.save(catalogue);
         } catch (IOException e) {
             e.printStackTrace();
         }

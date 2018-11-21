@@ -3,41 +3,49 @@ package implementatons;
 import model.ListOfItems;
 import model.Item;
 
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.PrintWriter;
+import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 
 public class LoadSave {
 
-    static void save(String listToString, String file) throws IOException {
-        List<String> lines = new ArrayList<>();
-        PrintWriter writer = new PrintWriter(new FileWriter(file, false));
-        lines.add(listToString);
-        for (String line : lines){
-            writer.println(line);
+    static void save(HashMap<String, ListOfItems> hmap) throws IOException {
+        try {
+            FileOutputStream fos = new FileOutputStream("inventory.ser");
+            ObjectOutputStream oos = new ObjectOutputStream(fos);
+            oos.writeObject(hmap);
+            oos.close();
+            fos.close();
+            System.out.printf("Saved inventory.");
         }
-        writer.close();
-        System.out.println("All entries saved.");
+        catch(IOException ioe) {
+            ioe.printStackTrace();
+        }
     }
 
-    static void load(ListOfItems list, String file) throws IOException {
-        List<String> lines = Files.readAllLines(Paths.get(file));
-        for (String line : lines) {
-            if (!line.isEmpty()) {
-                ArrayList<String> partsOfLine = splitOnSpace(line);
-                Item l = new Item();
-                l.setName(partsOfLine.get(0));
-                l.setAmount(partsOfLine.get(2));
-                list.insertItem(l);
-                System.out.print("Name: " + partsOfLine.get(0) + " ");
-                System.out.println("Amount: " + partsOfLine.get(2));
-            }
+    static HashMap<String, ListOfItems> load() throws IOException {
+        HashMap<String, ListOfItems> map = null;
+        try {
+            FileInputStream fis = new FileInputStream("inventory.ser");
+            ObjectInputStream ois = new ObjectInputStream(fis);
+            map = (HashMap) ois.readObject();
+            ois.close();
+            fis.close();
         }
+        catch(IOException ioe) {
+            ioe.printStackTrace();
+        }
+        catch(ClassNotFoundException c) {
+            System.out.println("Class not found");
+            c.printStackTrace();
+        }
+        System.out.println("Loaded inventory.");
+
+        return map;
     }
 
     public static ArrayList<String> splitOnSpace(String line){

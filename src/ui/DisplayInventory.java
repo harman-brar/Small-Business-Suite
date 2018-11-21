@@ -10,8 +10,10 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import model.Item;
 import model.ListOfItems;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 

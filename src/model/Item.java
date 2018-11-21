@@ -2,12 +2,13 @@ package model;
 
 import exceptions.NegativeNumberException;
 
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.HashSet;
 
 import static java.lang.Integer.parseInt;
 
-public class Item {
+public class Item implements Serializable {
     private String name;
     private int amount;
     private String category;
