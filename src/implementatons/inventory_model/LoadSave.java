@@ -43,7 +43,6 @@ public class LoadSave {
             System.out.println("Class not found");
             c.printStackTrace();
         }
-        System.out.println("Loaded inventory.");
 
         return map;
     }

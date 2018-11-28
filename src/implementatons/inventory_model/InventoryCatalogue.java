@@ -22,19 +22,7 @@ import java.util.*;
 import static javafx.scene.paint.Color.rgb;
 
 public class InventoryCatalogue extends Application {
-    private ListOfItems plantList,
-            smList,
-            rwsList,
-            turfList,
-            paversList,
-            packagedList,
-            blockList,
-            aggregatesList,
-            toolsList,
-            tpList;
-    private ArrayList<ListOfItems> itemsList;
-    public static Stage window;
-    public static Scene scene1;
+    private static Stage window;
     private Item i;
     private HashMap<String, ListOfItems> catalogue;
 
@@ -57,8 +45,6 @@ public class InventoryCatalogue extends Application {
     @FXML
     private Button newInvButton;
     @FXML
-    private TabPane tabPane;
-    @FXML
     private Tab plantTab;
     @FXML
     private Tab smTab;
@@ -78,7 +64,6 @@ public class InventoryCatalogue extends Application {
     private Tab toolsTab;
     @FXML
     private Tab tpTab;
-
 
     @FXML
     private void initialize() {
@@ -129,37 +114,18 @@ public class InventoryCatalogue extends Application {
         }
     }
 
-    // EFFECTS: constructs inventory_model catalogue with various loaded item lists
+    // MODIFIES: this
+    // EFFECTS: constructs inventory catalogue with various loaded item lists
     public InventoryCatalogue() {
-        /*catalogue = new HashMap<String, ListOfItems>();
-        plantList = new ListOfItems();
-        smList = new ListOfItems();
-        rwsList = new ListOfItems();
-        packagedList = new ListOfItems();
-        blockList = new ListOfItems();
-        toolsList = new ListOfItems();
-        tpList = new ListOfItems();
-        aggregatesList = new ListOfItems();
-        turfList = new ListOfItems();
-        paversList = new ListOfItems();*/
-
         try {
-            /*catalogue.put("Plants", plantList);
-            catalogue.put("Soils/Mulch", smList);
-            catalogue.put("Retaining Wall Systems", rwsList);
-            catalogue.put("Packaged", packagedList);
-            catalogue.put("Blocks", blockList);
-            catalogue.put("Tools", toolsList);
-            catalogue.put("Ties/Posts", tpList);
-            catalogue.put("Aggregates", aggregatesList);
-            catalogue.put("Turf", turfList);
-            catalogue.put("Pavers", paversList);*/
             catalogue = LoadSave.load();
         } catch (IOException e) {
            e.printStackTrace();
         }
     }
 
+    // MODIFIES: this
+    // EFFECTS: loads Inventory UI
     @Override
     public void start(Stage primaryStage) throws Exception  {
         window = primaryStage;
@@ -171,12 +137,13 @@ public class InventoryCatalogue extends Application {
 
     }
 
+    // MODIFIES: this
+    // EFFECTS: carries out action specified by user
     @FXML
     private void goButtonHit() {
 
         String action = actionCombo.getValue();
         String category = categoryCombo.getValue();
-        System.out.println(action);
 
         if (action.equals("Add")) {
             addOperation(nameBar.getText(), category, amountBar.getText());
@@ -186,21 +153,11 @@ public class InventoryCatalogue extends Application {
         }
         else if (action.equals("Delete")) {
             deleteOperation(nameBar.getText(), category);
-
-        /*} else if (action.equals("Search")) {
-            try {
-                i = findItem(name.getText(), catalogue);
-                DisplaySearchItem.display("Search Results", i.toString());
-            } catch(NullPointerException n) {
-                showActionPopup("DNE", popup, null, null);
-            }*/
         }
         else {
-            System.out.println("Action not recognized.");
+            showActionPopup("NoAction", null, null);
         }
-
         setTabControllers();
-        System.out.println("Test passed");
     }
 
     // MODIFIES: this,
@@ -212,7 +169,6 @@ public class InventoryCatalogue extends Application {
             showActionPopup("Delete", name, category);
         } catch (NullPointerException e) {
             showActionPopup("DNE",null, null);
-            System.out.println("Item DNE");
         }
         saveOperation(catalogue);
     }
@@ -246,10 +202,8 @@ public class InventoryCatalogue extends Application {
             i.performAdd(amount);
             showActionPopup(actionCombo.getValue(), name, category);
             catalogue.replace(i.getCategory(), mappedList);
-        } catch (NegativeNumberException ie) {
-            System.out.println("Please enter a valid amount");
-        } catch (NumberFormatException nfe) {
-            System.out.println("Please enter a number");
+        } catch (NegativeNumberException | NumberFormatException ie) {
+            showActionPopup("Number Error", null, null);
         }
         saveOperation(catalogue);
     }
@@ -267,6 +221,9 @@ public class InventoryCatalogue extends Application {
         else if (action.equals("Delete")) {
             msgBar.setText("'" + name + "'" + " deleted from " + category + " List");
         }
+        else if (action.equals("Number Error")) {
+            msgBar.setText("Please check entered amount.");
+        }
         else if (action.equals("Error")) {
             msgBar.setTextFill(Color.RED);
             msgBar.setText("Not enough units of item to remove.");
@@ -274,6 +231,10 @@ public class InventoryCatalogue extends Application {
         else if (action.equals("DNE")) {
             msgBar.setTextFill(Color.RED);
             msgBar.setText("Item does not exist.");
+        }
+        else if (action.equals("NoAction")) {
+            msgBar.setTextFill(Color.RED);
+            msgBar.setText("Please pick an action.");
         }
         else {
             msgBar.setTextFill(Color.RED);
@@ -300,19 +261,6 @@ public class InventoryCatalogue extends Application {
         new Thread(sleeper).start();
     }
 
-    // REQUIRES: item is in one and only one of the category list
-    // MODIFIES: this
-    // EFFECTS: finds item with name name
-    private Item findItem(String name, HashMap<String, ListOfItems> c) {
-        for (ListOfItems l : itemsList) {
-            if (l.contains(name)) {
-                i = l.getItem(name);
-                break;
-            }
-        }
-        return i;
-    }
-
     // MODIFIES: this
     // EFFECTS: saves inventory_model and then closes program window
     private void saveOperation(HashMap<String, ListOfItems> catalogue) {
@@ -323,18 +271,25 @@ public class InventoryCatalogue extends Application {
         }
     }
 
+    // EFFECTS: returns catalogue of lists of items
     public HashMap<String, ListOfItems> getCatalogue() {
         return catalogue;
     }
 
+    // MODIFIES: this
+    // EFFECTS: changes text in nameBar
     public void setNameBar(String s) {
         nameBar.setText(s);
     }
 
+    // MODIFIES: this
+    // EFFECTS: changes text in amountBar
     public void setAmountBar(String amount) {
         amountBar.setText(amount);
     }
 
+    // MODIFIES: this
+    // EFFECTS: changes selected text of categoryCombo
     public void setCategoryCombo(String category) {
         categoryCombo.setValue(category);
     }
