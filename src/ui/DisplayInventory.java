@@ -19,7 +19,7 @@ import java.util.List;
 
 public class DisplayInventory {
 
-    // EFFECTS: displays window with inventory
+    // EFFECTS: displays window with inventory_model
     public static void display(String title, HashMap<String, ListOfItems> catalogue) {
         Stage window = new Stage();
 

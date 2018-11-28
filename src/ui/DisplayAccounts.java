@@ -1,6 +1,6 @@
 package ui;
 
-import implementatons.InventoryCatalogue;
+import implementatons.inventory_model.InventoryCatalogue;
 import javafx.event.ActionEvent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;

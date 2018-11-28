@@ -1,4 +1,4 @@
-package implementatons;
+package implementatons.inventory_model;
 
 import model.ListOfItems;
 import model.Item;
@@ -52,6 +52,5 @@ public class LoadSave {
         String[] splits = line.split(" ");
         return new ArrayList<>(Arrays.asList(splits));
     }
-
 
 }

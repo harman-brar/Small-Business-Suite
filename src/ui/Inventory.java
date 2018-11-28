@@ -1,15 +1,11 @@
 package ui;
 
-import implementatons.InventoryCatalogue;
+import implementatons.inventory_model.InventoryCatalogue;
 import javafx.application.Application;
 import payment.Account;
 import payment.Invoice;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.Date;
 
 public class Inventory {
@@ -21,6 +17,8 @@ public class Inventory {
         Invoice invoice = new Invoice(date, account, null, 1);
         account.addInvoice(invoice);
         invoice.payInvoice();
+
+        InventoryCatalogue catalogue = new InventoryCatalogue();
 
         Application.launch(InventoryCatalogue.class, args);
     }
