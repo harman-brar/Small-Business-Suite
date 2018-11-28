@@ -48,8 +48,8 @@ public class LoadSave {
         return map;
     }
 
-    public static ArrayList<String> splitOnSpace(String line){
-        String[] splits = line.split(" ");
+    public static ArrayList<String> splitOnPipe(String line){
+        String[] splits = line.split(" " + "\\|" + " ");;
         return new ArrayList<>(Arrays.asList(splits));
     }
 

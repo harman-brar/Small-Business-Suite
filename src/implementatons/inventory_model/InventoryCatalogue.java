@@ -1,9 +1,6 @@
 package implementatons.inventory_model;
 
-import implementatons.tab_model.TabController;
-import implementatons.tab_model.aggregateTabController;
-import implementatons.tab_model.paverTabController;
-import implementatons.tab_model.turfTabController;
+import implementatons.tab_model.*;
 import javafx.concurrent.Task;
 import javafx.concurrent.WorkerStateEvent;
 import javafx.event.EventHandler;
@@ -18,7 +15,6 @@ import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import model.Item;
-import ui.DisplayInventory;
 
 import java.io.*;
 import java.util.*;
@@ -26,7 +22,16 @@ import java.util.*;
 import static javafx.scene.paint.Color.rgb;
 
 public class InventoryCatalogue extends Application {
-    private ListOfItems aggregatesList, turfList, paversList;
+    private ListOfItems plantList,
+            smList,
+            rwsList,
+            turfList,
+            paversList,
+            packagedList,
+            blockList,
+            aggregatesList,
+            toolsList,
+            tpList;
     private ArrayList<ListOfItems> itemsList;
     public static Stage window;
     public static Scene scene1;
@@ -102,9 +107,16 @@ public class InventoryCatalogue extends Application {
     }
 
     private void setTabControllers() {
-        setTabContent(aggregatesTab, new aggregateTabController(this));
+        setTabContent(plantTab, new plantTabController(this));
+        setTabContent(smTab, new smTabController(this));
+        setTabContent(rwsTab, new rwsTabController(this));
+        setTabContent(blocksTab, new blockTabController(this));
         setTabContent(turfTab, new turfTabController(this));
         setTabContent(paversTab, new paverTabController(this));
+        setTabContent(packagedTab, new packagedTabController(this));
+        setTabContent(aggregatesTab, new aggregateTabController(this));
+        setTabContent(toolsTab, new toolTabController(this));
+        setTabContent(tpTab, new tpTabController(this));
     }
 
     private void setTabContent(Tab tab, TabController controller) {
@@ -119,16 +131,29 @@ public class InventoryCatalogue extends Application {
 
     // EFFECTS: constructs inventory_model catalogue with various loaded item lists
     public InventoryCatalogue() {
-        /*aggregatesList = new ListOfItems();
+        /*catalogue = new HashMap<String, ListOfItems>();
+        plantList = new ListOfItems();
+        smList = new ListOfItems();
+        rwsList = new ListOfItems();
+        packagedList = new ListOfItems();
+        blockList = new ListOfItems();
+        toolsList = new ListOfItems();
+        tpList = new ListOfItems();
+        aggregatesList = new ListOfItems();
         turfList = new ListOfItems();
-        paversList = new ListOfItems();
-
-        itemsList = new ArrayList<ListOfItems>();
-        itemsList.add(aggregatesList);
-        itemsList.add(turfList);
-        itemsList.add(paversList);*/
+        paversList = new ListOfItems();*/
 
         try {
+            /*catalogue.put("Plants", plantList);
+            catalogue.put("Soils/Mulch", smList);
+            catalogue.put("Retaining Wall Systems", rwsList);
+            catalogue.put("Packaged", packagedList);
+            catalogue.put("Blocks", blockList);
+            catalogue.put("Tools", toolsList);
+            catalogue.put("Ties/Posts", tpList);
+            catalogue.put("Aggregates", aggregatesList);
+            catalogue.put("Turf", turfList);
+            catalogue.put("Pavers", paversList);*/
             catalogue = LoadSave.load();
         } catch (IOException e) {
            e.printStackTrace();

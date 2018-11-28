@@ -76,9 +76,16 @@
                         <ComboBox fx:id="categoryCombo" layoutX="89.0" layoutY="274.0" prefHeight="30.0" prefWidth="150.0" promptText="Category">
                             <items>
                                 <FXCollections fx:factory="observableArrayList">
-                                    <String fx:value="Aggregates" />
+                                    <String fx:value="Plants" />
+                                    <String fx:value="Soils/Mulch" />
+                                    <String fx:value="Retaining Wall Systems" />
                                     <String fx:value="Turf" />
                                     <String fx:value="Pavers" />
+                                    <String fx:value="Packaged" />
+                                    <String fx:value="Blocks" />
+                                    <String fx:value="Aggregates" />
+                                    <String fx:value="Tools" />
+                                    <String fx:value="Ties/Posts" />
                                 </FXCollections>
                             </items>
                         </ComboBox>
@@ -117,11 +124,6 @@
                                         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
                                     </content>
                                 </Tab>
-                                <Tab text="Blocks" fx:id="blocksTab">
-                                    <content>
-                                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
-                                    </content>
-                                </Tab>
                                 <Tab text="Turf" fx:id="turfTab">
                                     <content>
                                         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
@@ -133,6 +135,11 @@
                                     </content>
                                 </Tab>
                                 <Tab text="Packaged" fx:id="packagedTab">
+                                    <content>
+                                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                                    </content>
+                                </Tab>
+                                <Tab text="Blocks" fx:id="blocksTab">
                                     <content>
                                         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
                                     </content>

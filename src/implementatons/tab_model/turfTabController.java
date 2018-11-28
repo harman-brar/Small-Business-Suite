@@ -48,9 +48,9 @@ public class turfTabController implements TabController {
             vbox.setPrefHeight(anchor.getPrefHeight());
             vbox.getChildren().add(btn);
             btn.setOnAction(event -> {
-                List<String> partsOfLine = Arrays.asList(btn.getText().split("\\|"));
+                List<String> partsOfLine = LoadSave.splitOnPipe(btn.getText());
                 inventoryCatalogue.setNameBar(partsOfLine.get(0));
-                inventoryCatalogue.setAmountBar(partsOfLine.get(2));
+                inventoryCatalogue.setAmountBar(partsOfLine.get(1));
                 inventoryCatalogue.setCategoryCombo("Turf");
             });
         }

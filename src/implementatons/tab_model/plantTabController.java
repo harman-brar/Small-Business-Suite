@@ -11,10 +11,9 @@ import javafx.scene.layout.VBox;
 import model.Item;
 import model.ListOfItems;
 
-import java.io.IOException;
 import java.util.List;
 
-public class aggregateTabController implements TabController {
+public class plantTabController implements TabController {
     private ListOfItems l;
     private InventoryCatalogue inventoryCatalogue;
 
@@ -38,7 +37,7 @@ public class aggregateTabController implements TabController {
         assert anchor != null : "fx:id=\"anchor\" was not injected: check your FXML file 'tabContent.fxml'.";
 
 
-        titleLabel.setText("Aggregates");
+        titleLabel.setText("Plants");
 
         for(int i=0; i<=l.getSize()-1; i++) {
             Item item = l.get(i);
@@ -52,15 +51,14 @@ public class aggregateTabController implements TabController {
                 System.out.println(partsOfLine);
                 inventoryCatalogue.setNameBar(partsOfLine.get(0));
                 inventoryCatalogue.setAmountBar(partsOfLine.get(1));
-                inventoryCatalogue.setCategoryCombo("Aggregates");
+                inventoryCatalogue.setCategoryCombo("Plants");
             });
         }
 
     }
 
-    public aggregateTabController(InventoryCatalogue inventoryCatalogue) {
+    public plantTabController(InventoryCatalogue inventoryCatalogue) {
         this.inventoryCatalogue = inventoryCatalogue;
-        l = inventoryCatalogue.getCatalogue().get("Aggregates");
+        l = inventoryCatalogue.getCatalogue().get("Plants");
     }
-
 }

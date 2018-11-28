@@ -47,9 +47,9 @@ public class paverTabController implements TabController {
             vbox.setPrefHeight(anchor.getPrefHeight());
             vbox.getChildren().add(btn);
             btn.setOnAction(event -> {
-                List<String> partsOfLine = LoadSave.splitOnSpace(btn.getText());
+                List<String> partsOfLine = LoadSave.splitOnPipe(btn.getText());
                 inventoryCatalogue.setNameBar(partsOfLine.get(0));
-                inventoryCatalogue.setAmountBar(partsOfLine.get(2));
+                inventoryCatalogue.setAmountBar(partsOfLine.get(1));
                 inventoryCatalogue.setCategoryCombo("Pavers");
             });
         }
