@@ -1,14 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import javafx.collections.*?>
-<?import javafx.geometry.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.paint.*?>
-<?import javafx.scene.text.*?>
+<?import java.lang.String?>
+<?import javafx.collections.FXCollections?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.SeparatorMenuItem?>
+<?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.ToolBar?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.paint.Color?>
+<?import javafx.scene.text.Font?>
 
-<VBox prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="implementatons.inventory_model.InventoryCatalogue">
+<VBox prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="implementatons.inventory_model.InventoryCatalogue">
     <children>
         <MenuBar VBox.vgrow="NEVER">
             <menus>
@@ -58,7 +73,7 @@
                 <AnchorPane id="Content" minHeight="-1.0" minWidth="-1.0" prefHeight="525.0" prefWidth="439.0" style="-fx-background-color: #e6e6e6;">
                     <children>
                         <Label fx:id="msgBar" layoutX="10.0" layoutY="25.0" prefHeight="35.0" prefWidth="300.0" />
-                        <Label layoutX="99.0" layoutY="62.0" text="Inventory" textFill="DARKORANGE">
+                        <Label layoutX="84.0" layoutY="60.0" text="Inventory" textFill="DARKORANGE">
                             <font>
                                 <Font size="40.0" />
                             </font>
@@ -95,9 +110,9 @@
                             <items>
                                 <HBox prefHeight="51.0" prefWidth="306.0" spacing="20.0">
                                     <children>
-                                        <Button fx:id="accButton" mnemonicParsing="false" prefHeight="30.0" prefWidth="100.0" text="Accounts" />
+                                        <Button fx:id="accButton" mnemonicParsing="false" onAction="#seeAccounts" prefHeight="30.0" prefWidth="100.0" text="Accounts" />
                                         <Button fx:id="printButton" mnemonicParsing="false" prefHeight="30.0" prefWidth="80.0" text="Print" />
-                                        <Button fx:id="newInvButton" mnemonicParsing="false" prefHeight="30.0" prefWidth="105.0" text="+ Invoice" />
+                                        <Button fx:id="newInvButton" mnemonicParsing="false" onAction="#newInvoice" prefHeight="30.0" prefWidth="105.0" text="+ Invoice" />
                                     </children>
                                 </HBox>
                             </items>
@@ -109,52 +124,52 @@
                     <children>
                         <TabPane fx:id="tabPane" prefHeight="561.0" prefWidth="393.0" tabClosingPolicy="UNAVAILABLE">
                             <tabs>
-                                <Tab text="Plants" fx:id="plantTab">
+                                <Tab fx:id="plantTab" text="Plants">
                                     <content>
                                         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="498.0" prefWidth="355.0" />
                                     </content>
                                 </Tab>
-                                <Tab text="Soil/Mulch" fx:id="smTab">
+                                <Tab fx:id="smTab" text="Soil/Mulch">
                                     <content>
                                         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
                                     </content>
                                 </Tab>
-                                <Tab text="RWS" fx:id="rwsTab">
+                                <Tab fx:id="rwsTab" text="RWS">
                                     <content>
                                         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
                                     </content>
                                 </Tab>
-                                <Tab text="Turf" fx:id="turfTab">
+                                <Tab fx:id="turfTab" text="Turf">
                                     <content>
                                         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
                                     </content>
                                 </Tab>
-                                <Tab text="Pavers" fx:id="paversTab">
+                                <Tab fx:id="paversTab" text="Pavers">
                                     <content>
                                         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
                                     </content>
                                 </Tab>
-                                <Tab text="Packaged" fx:id="packagedTab">
+                                <Tab fx:id="packagedTab" text="Packaged">
                                     <content>
                                         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
                                     </content>
                                 </Tab>
-                                <Tab text="Blocks" fx:id="blocksTab">
+                                <Tab fx:id="blocksTab" text="Blocks">
                                     <content>
                                         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
                                     </content>
                                 </Tab>
-                                <Tab text="Aggregates" fx:id="aggregatesTab">
+                                <Tab fx:id="aggregatesTab" text="Aggregates">
                                     <content>
                                         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
                                     </content>
                                 </Tab>
-                                <Tab text="Tools" fx:id="toolsTab">
+                                <Tab fx:id="toolsTab" text="Tools">
                                     <content>
                                         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
                                     </content>
                                 </Tab>
-                                <Tab text="Ties/Posts" fx:id="tpTab">
+                                <Tab fx:id="tpTab" text="Ties/Posts">
                                     <content>
                                         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
                                     </content>

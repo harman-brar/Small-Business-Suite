@@ -1,14 +1,165 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
+<?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.paint.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.SeparatorMenuItem?>
+<?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.paint.Color?>
+<?import javafx.scene.text.Font?>
 
-<AnchorPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="payment.AccountManager"
-            prefHeight="400.0" prefWidth="600.0">
-
-</AnchorPane>
+<VBox prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="billing.AccountManager">
+  <children>
+    <MenuBar VBox.vgrow="NEVER">
+      <menus>
+        <Menu mnemonicParsing="false" text="File">
+          <items>
+            <MenuItem mnemonicParsing="false" text="New" />
+            <MenuItem mnemonicParsing="false" text="Open…" />
+            <Menu mnemonicParsing="false" text="Open Recent" />
+            <SeparatorMenuItem mnemonicParsing="false" />
+            <MenuItem mnemonicParsing="false" text="Close" />
+            <MenuItem mnemonicParsing="false" text="Save" />
+            <MenuItem mnemonicParsing="false" text="Save As…" />
+            <MenuItem mnemonicParsing="false" text="Revert" />
+            <SeparatorMenuItem mnemonicParsing="false" />
+            <MenuItem mnemonicParsing="false" text="Preferences…" />
+            <SeparatorMenuItem mnemonicParsing="false" />
+            <MenuItem mnemonicParsing="false" text="Quit" />
+          </items>
+        </Menu>
+        <Menu mnemonicParsing="false" text="Edit">
+          <items>
+            <MenuItem mnemonicParsing="false" text="Undo" />
+            <MenuItem mnemonicParsing="false" text="Redo" />
+            <SeparatorMenuItem mnemonicParsing="false" />
+            <MenuItem mnemonicParsing="false" text="Cut" />
+            <MenuItem mnemonicParsing="false" text="Copy" />
+            <MenuItem mnemonicParsing="false" text="Paste" />
+            <MenuItem mnemonicParsing="false" text="Delete" />
+            <SeparatorMenuItem mnemonicParsing="false" />
+            <MenuItem mnemonicParsing="false" text="Select All" />
+            <MenuItem mnemonicParsing="false" text="Unselect All" />
+          </items>
+        </Menu>
+        <Menu mnemonicParsing="false" text="Help">
+          <items>
+            <MenuItem mnemonicParsing="false" text="About" />
+          </items>
+        </Menu>
+      </menus>
+    </MenuBar>
+    <SplitPane dividerPositions="0.29398663697104677, 0.6904231625835189" focusTraversable="true" prefHeight="-1.0" prefWidth="-1.0" VBox.vgrow="ALWAYS">
+      <items>
+        <AnchorPane prefHeight="526.0" prefWidth="245.0">
+          <children>
+            <Label alignment="CENTER" layoutX="14.0" layoutY="14.0" minWidth="60.0" prefWidth="-1.0" style="&#10;" textAlignment="CENTER" wrapText="false">
+              <font>
+                <Font size="1.0" fx:id="x1" />
+              </font>
+              <textFill>
+                <Color blue="0.624" green="0.624" red="0.624" fx:id="x2" />
+              </textFill>
+            </Label>
+                <AnchorPane fx:id="accountsPane" minHeight="0.0" minWidth="0.0" prefHeight="552.0" prefWidth="257.0">
+                     <children>
+                        <ScrollPane fx:id="scrollPane" layoutX="-4.0" layoutY="-2.0" prefHeight="552.0" prefWidth="264.0">
+                          <content>
+                            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="551.0" prefWidth="264.0">
+                                 <children>
+                                    <Label layoutX="23.0" layoutY="20.0" text="Accounts">
+                                       <font>
+                                          <Font name="System Bold" size="28.0" />
+                                       </font>
+                                    </Label>
+                                    <VBox fx:id="vBox" layoutX="7.0" layoutY="73.0" prefHeight="453.0" prefWidth="228.0" />
+                                 </children>
+                              </AnchorPane>
+                          </content>
+                        </ScrollPane>
+                     </children>
+                  </AnchorPane>
+          </children>
+        </AnchorPane>
+      <AnchorPane id="Content" minHeight="-1.0" minWidth="-1.0" prefHeight="525.0" prefWidth="350.0">
+        <children>
+          <Label alignment="CENTER" layoutX="14.0" layoutY="14.0" style="&#10;" textAlignment="CENTER" textFill="$x2" wrapText="false">
+                     <font>
+                        <Font size="1.0" />
+                     </font></Label>
+                  <AnchorPane layoutX="-10.0" layoutY="-3.0" prefHeight="548.0" prefWidth="352.0">
+                     <children>
+                        <Label layoutX="82.0" layoutY="19.0" text="Company Info" textFill="DARKORANGE">
+                           <font>
+                              <Font size="29.0" />
+                           </font>
+                        </Label>
+                        <TextField fx:id="compName" layoutX="24.0" layoutY="80.0" prefHeight="45.0" prefWidth="297.0" promptText="Company Name" />
+                        <TextField fx:id="compAdd" layoutX="24.0" layoutY="149.0" prefHeight="45.0" prefWidth="297.0" promptText="Company Address" />
+                        <TextField fx:id="compPhone" layoutX="26.0" layoutY="218.0" prefHeight="45.0" prefWidth="297.0" promptText="Company Phone" />
+                        <Label layoutX="90.0" layoutY="282.0" text="Contact Info">
+                           <font>
+                              <Font name="System Bold" size="26.0" />
+                           </font></Label>
+                        <TextField fx:id="contName" layoutX="22.0" layoutY="330.0" prefHeight="45.0" prefWidth="297.0" promptText="Contact Name" />
+                        <TextField fx:id="contPhone" layoutX="22.0" layoutY="391.0" prefHeight="45.0" prefWidth="297.0" promptText="Contact Phone" />
+                        <Button fx:id="addAccBtn" layoutX="73.0" layoutY="462.0" mnemonicParsing="false" onAction="#addAccount" prefHeight="45.0" prefWidth="200.0" text="Add Account" />
+                     </children>
+                  </AnchorPane>
+        </children>
+      </AnchorPane>
+            <ScrollPane prefHeight="200.0" prefWidth="200.0">
+               <content>
+              <AnchorPane prefHeight="554.0" prefWidth="268.0">
+                     <children>
+                        <Label layoutX="34.0" layoutY="21.0" text="Details">
+                           <font>
+                              <Font name="System Bold" size="28.0" />
+                           </font>
+                        </Label>
+                        <Label fx:id="compNameLabel" layoutX="48.0" layoutY="64.0" />
+                        <Label fx:id="compAddLabel" layoutX="48.0" layoutY="104.0" />
+                        <Label fx:id="compPhoneLabel" layoutX="47.0" layoutY="144.0" />
+                        <Label fx:id="contNameLabel" layoutX="48.0" layoutY="182.0" />
+                        <Label fx:id="contPhoneLabel" layoutX="48.0" layoutY="224.0" />
+                        <Label fx:id="amountDueLabel" layoutX="48.0" layoutY="263.0" />
+                        <VBox fx:id="invBox" layoutX="-3.0" layoutY="317.0" prefHeight="236.0" prefWidth="249.0" />
+                     </children>
+              </AnchorPane>
+               </content>
+            </ScrollPane>
+      </items>
+    </SplitPane>
+      <VBox prefHeight="527.0" prefWidth="241.0" />
+    <HBox id="HBox" alignment="CENTER_LEFT" spacing="5.0" VBox.vgrow="NEVER">
+      <children>
+        <Label maxHeight="1.7976931348623157E308" maxWidth="-1.0" text="Left status" HBox.hgrow="ALWAYS">
+          <font>
+            <Font size="11.0" fx:id="x3" />
+          </font>
+          <textFill>
+            <Color blue="0.625" green="0.625" red="0.625" fx:id="x4" />
+          </textFill>
+        </Label>
+        <Pane prefHeight="-1.0" prefWidth="-1.0" HBox.hgrow="ALWAYS" />
+        <Label font="$x3" maxWidth="-1.0" text="Right status" textFill="$x4" HBox.hgrow="NEVER" />
+      </children>
+      <padding>
+        <Insets bottom="3.0" left="3.0" right="3.0" top="3.0" />
+      </padding>
+    </HBox>
+  </children>
+</VBox>

@@ -1,13 +1,14 @@
-package payment;
+package billing;
 
 import model.Item;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Observable;
 import java.util.Set;
 
-public class Invoice extends Observable {
+public class Invoice extends Observable implements Serializable {
     private Date date;
     private Account acc;
     private String address;

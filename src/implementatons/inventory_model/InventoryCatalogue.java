@@ -3,12 +3,15 @@ package implementatons.inventory_model;
 import implementatons.tab_model.*;
 import javafx.concurrent.Task;
 import javafx.concurrent.WorkerStateEvent;
+import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.control.*;
 import javafx.scene.paint.Color;
+import javafx.stage.Modality;
+import javafx.stage.StageStyle;
 import model.ListOfItems;
 import exceptions.NegativeNumberException;
 import javafx.application.Application;
@@ -16,6 +19,7 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import model.Item;
 
+import javax.swing.*;
 import java.io.*;
 import java.util.*;
 
@@ -141,7 +145,6 @@ public class InventoryCatalogue extends Application {
     // EFFECTS: carries out action specified by user
     @FXML
     private void goButtonHit() {
-
         String action = actionCombo.getValue();
         String category = categoryCombo.getValue();
 
@@ -158,6 +161,39 @@ public class InventoryCatalogue extends Application {
             showActionPopup("NoAction", null, null);
         }
         setTabControllers();
+    }
+
+    // EFFECTS: launches new invoice builder window
+    @FXML
+    private void newInvoice() {
+        try{
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("../../ui/resources/createInvoice.fxml"));
+            Parent root1 = (Parent) fxmlLoader.load();
+            Stage stage = new Stage();
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.initStyle(StageStyle.DECORATED);
+            stage.setTitle("New Invoice (1)");
+            stage.setScene(new Scene(root1));
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    private void seeAccounts() {
+        try{
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("../../ui/resources/accountManager.fxml"));
+            Parent root1 = (Parent) fxmlLoader.load();
+            Stage stage = new Stage();
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.initStyle(StageStyle.DECORATED);
+            stage.setTitle("Accounts Manager");
+            stage.setScene(new Scene(root1));
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     // MODIFIES: this,

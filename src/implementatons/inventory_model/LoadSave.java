@@ -1,5 +1,6 @@
 package implementatons.inventory_model;
 
+import billing.Account;
 import model.ListOfItems;
 import model.Item;
 
@@ -45,6 +46,40 @@ public class LoadSave {
         }
 
         return map;
+    }
+
+    public static void saveAccounts(List<Account> accounts) throws IOException {
+        try {
+            FileOutputStream fos = new FileOutputStream("accounts.ser");
+            ObjectOutputStream oos = new ObjectOutputStream(fos);
+            oos.writeObject(accounts);
+            oos.close();
+            fos.close();
+            System.out.printf("Saved account.");
+        }
+        catch(IOException ioe) {
+            ioe.printStackTrace();
+        }
+    }
+
+    public static List<Account> loadAccounts() throws IOException {
+        List<Account> accounts = null;
+        try {
+            FileInputStream fis = new FileInputStream("accounts.ser");
+            ObjectInputStream ois = new ObjectInputStream(fis);
+            accounts = (List<Account>) ois.readObject();
+            ois.close();
+            fis.close();
+        }
+        catch(IOException ioe) {
+            ioe.printStackTrace();
+        }
+        catch(ClassNotFoundException c) {
+            System.out.println("Class not found");
+            c.printStackTrace();
+        }
+
+        return accounts;
     }
 
     public static ArrayList<String> splitOnPipe(String line){
