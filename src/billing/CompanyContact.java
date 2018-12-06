@@ -1,6 +1,8 @@
 package billing;
 
-public class CompanyContact {
+import java.io.Serializable;
+
+public class CompanyContact implements Serializable {
     private String name, phone;
 
     // EFFECTS: creates new contact

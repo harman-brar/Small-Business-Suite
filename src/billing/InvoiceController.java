@@ -1,4 +1,6 @@
 package billing;
 
-public class InvoiceController {
+import java.io.Serializable;
+
+public class InvoiceController implements Serializable {
 }

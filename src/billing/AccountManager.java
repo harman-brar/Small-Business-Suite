@@ -10,6 +10,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 import model.Item;
 
+import java.io.EOFException;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -19,6 +20,7 @@ import java.util.Set;
 
 public class AccountManager implements Serializable {
     private List<Account> accounts;
+    boolean saved = false;
 
     @FXML
     private TextField compName;
@@ -75,12 +77,13 @@ public class AccountManager implements Serializable {
     }
 
     public AccountManager() {
-        accounts = new ArrayList<Account>();
-        /*try {
+        try {
             accounts = LoadSave.loadAccounts();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }*/
+        } catch (EOFException e) {
+            accounts = new ArrayList<Account>();
+        } catch (IOException io) {
+            io.printStackTrace();
+        }
     }
 
     @FXML
@@ -92,6 +95,7 @@ public class AccountManager implements Serializable {
             addBtnForAcc(account);
             try {
                 LoadSave.saveAccounts(accounts);
+                this.saved = true;
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -152,7 +156,7 @@ public class AccountManager implements Serializable {
                 inventoryCatalogue.setAmountBar(partsOfLine.get(1));
                 inventoryCatalogue.setCategoryCombo("Aggregates");
             });*/
-        addBtnForAcc(null);
+        addBtnForAcc(account);
         }
     }
 

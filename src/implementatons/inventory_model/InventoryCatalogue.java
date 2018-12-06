@@ -1,5 +1,6 @@
 package implementatons.inventory_model;
 
+import billing.AccountManager;
 import implementatons.tab_model.*;
 import javafx.concurrent.Task;
 import javafx.concurrent.WorkerStateEvent;
@@ -182,6 +183,7 @@ public class InventoryCatalogue extends Application {
 
     @FXML
     private void seeAccounts() {
+        AccountManager accountManager = new AccountManager();
         try{
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("../../ui/resources/accountManager.fxml"));
             Parent root1 = (Parent) fxmlLoader.load();
