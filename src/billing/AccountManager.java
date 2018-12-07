@@ -8,6 +8,7 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import model.Item;
 
 import java.io.EOFException;
@@ -20,7 +21,6 @@ import java.util.Set;
 
 public class AccountManager implements Serializable {
     private List<Account> accounts;
-    boolean saved = false;
 
     @FXML
     private TextField compName;
@@ -39,22 +39,13 @@ public class AccountManager implements Serializable {
     @FXML
     private ScrollPane scrollPane;
     @FXML
-    private VBox vBox;
-    @FXML
-    private Label compNameLabel;
-    @FXML
-    private Label compAddLabel;
-    @FXML
-    private Label compPhoneLabel;
-    @FXML
-    private Label contNameLabel;
-    @FXML
-    private Label contPhoneLabel;
-    @FXML
     private Label amountDueLabel;
+    @FXML
+    private VBox vBox;
     @FXML
     private VBox invBox;
 
+    // EFFECTS: inits fxml components
     @FXML
     private void initialize() {
         assert compName != null : "fx:id=\"compName\" was not injected: check your FXML file 'accountManager.fxml'.";
@@ -65,17 +56,13 @@ public class AccountManager implements Serializable {
         assert addAccBtn != null : "fx:id=\"addAccBtn\" was not injected: check your FXML file 'accountManager.fxml'.";
         assert accountsPane != null : "fx:id=\"accountsPane\" was not injected: check your FXML file 'accountManager.fxml'.";
         assert scrollPane != null : "fx:id=\"scrollPane\" was not injected: check your FXML file 'accountManager.fxml'.";
-        assert compNameLabel != null : "fx:id=\"compNameLabel\" was not injected: check your FXML file 'accountManager.fxml'.";
-        assert compAddLabel != null : "fx:id=\"compAddLabel\" was not injected: check your FXML file 'accountManager.fxml'.";
-        assert compPhoneLabel != null : "fx:id=\"compPhoneLabel\" was not injected: check your FXML file 'accountManager.fxml'.";
-        assert contNameLabel != null : "fx:id=\"contNameLabel\" was not injected: check your FXML file 'accountManager.fxml'.";
-        assert contPhoneLabel != null : "fx:id=\"contPhoneLabel\" was not injected: check your FXML file 'accountManager.fxml'.";
         assert amountDueLabel != null : "fx:id=\"amountDueLabel\" was not injected: check your FXML file 'accountManager.fxml'.";
         assert invBox != null : "fx:id=\"invBox\" was not injected: check your FXML file 'accountManager.fxml'.";
 
         refreshAccounts();
     }
 
+    // EFFECTS: constructs account manager
     public AccountManager() {
         try {
             accounts = LoadSave.loadAccounts();
@@ -86,6 +73,8 @@ public class AccountManager implements Serializable {
         }
     }
 
+    // MODIFIES: this
+    // EFFECTS: creates and adds account to list
     @FXML
     private void addAccount() {
         CompanyContact contact = new CompanyContact(contName.getText(), contPhone.getText());
@@ -93,24 +82,36 @@ public class AccountManager implements Serializable {
         if (!accounts.contains(account)) {
             accounts.add(account);
             addBtnForAcc(account);
-            try {
-                LoadSave.saveAccounts(accounts);
-                this.saved = true;
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
         } else {
-            System.out.println("Account Already Exists");
+            removeAccount(account);
+            editAccount(account);
+            accounts.add(account);
+            System.out.println("Changes will take place on window close.");
+        }
+        try {
+            LoadSave.saveAccounts(accounts);
+        } catch (IOException e) {
+            e.printStackTrace();
         }
 
     }
 
-    private void removeAccount(Account acc) {
-        if (accounts.contains(acc)) {
-            accounts.remove(acc);
-        }
+    // MODIFIES: this
+    // EFFECTS: removes account from list
+    private void removeAccount(Account account) {
+        accounts.remove(account);
     }
 
+    // MODIFIES: this
+    // EFFECTS: updates account information
+    private void editAccount(Account account) {
+        account.setPhoneNumber(compPhone.getText());
+        account.setAddress(compAdd.getText());
+        account.setContact(contName.getText(), contPhone.getText());
+    }
+
+    // MODIFIES: this
+    // EFFECTS: creates button for given account and gives it an action
     private void addBtnForAcc(Account account) {
         Button btn = new Button(account.getCompanyName());
         btn.setPrefSize(200, 35);
@@ -119,17 +120,26 @@ public class AccountManager implements Serializable {
         vBox.setSpacing(10.0);
         vBox.getChildren().add(btn);
         btn.setOnAction(event -> {
-                compNameLabel.setText("Name: " + account.getCompanyName());
-                compAddLabel.setText("Address: " + account.getAddress());
-                compPhoneLabel.setText("Phone: " + account.getPhone());
-                contNameLabel.setText("Contact Name: " + account.getContact().getName());
-                contPhoneLabel.setText("Contact Phone: " + account.getContact().getPhone());
+                compName.setText(account.getCompanyName());
+                compAdd.setText(account.getAddress());
+                compPhone.setText(account.getPhone());
+                contName.setText(account.getContact().getName());
+                contPhone.setText(account.getContact().getPhone());
+                addAccBtn.setText("Edit");
+                addAccBtn.setTextFill(Color.RED);
+                addAccBtn.setOnAction(event1 -> {
+                    addAccount();
+                    addAccBtn.setText("Do It");
+                    addAccBtn.setTextFill(Color.BLACK);
+                });
                 for (Invoice i : account.getInvoices()) {
                     setInvoiceBtnAction(i);
                 }
         });
     }
 
+    // MODIFIES: this
+    // EFFECTS: creates button for each invoice and gives it an action
     private void setInvoiceBtnAction(Invoice invoice) {
         Button btn = new Button("Invoice: " + String.valueOf(invoice.getInvNumber()));
         btn.setPrefSize(200, 35);
@@ -141,25 +151,15 @@ public class AccountManager implements Serializable {
         });
     }
 
+    // MODIFIES: this
+    // EFFECTS: re-renders account buttons
     private void refreshAccounts() {
         for(Account account : accounts) {
-            /*Button btn = new Button(account.getCompanyName());
-            btn.setPrefSize(200, 35);
-            scrollPane.setFitToHeight(true);
-            vBox.setPrefHeight(accountsPane.getPrefHeight());
-            vBox.setSpacing(10.0);
-            vBox.getChildren().add(btn);
-            btn.setOnAction(event -> {
-                /*List<String> partsOfLine = LoadSave.splitOnPipe(btn.getText());
-                System.out.println(partsOfLine);
-                inventoryCatalogue.setNameBar(partsOfLine.get(0));
-                inventoryCatalogue.setAmountBar(partsOfLine.get(1));
-                inventoryCatalogue.setCategoryCombo("Aggregates");
-            });*/
-        addBtnForAcc(account);
+            addBtnForAcc(account);
         }
     }
 
+    // EFFECTS: returns accounts
     public List<Account> getAccounts() {
         return accounts;
     }

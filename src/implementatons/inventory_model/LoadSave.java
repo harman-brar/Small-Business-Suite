@@ -21,7 +21,7 @@ public class LoadSave {
             oos.writeObject(hmap);
             oos.close();
             fos.close();
-            System.out.printf("Saved inventory.");
+            System.out.println("Saved inventory.");
         }
         catch(IOException ioe) {
             ioe.printStackTrace();
@@ -32,7 +32,6 @@ public class LoadSave {
         HashMap<String, ListOfItems> map = null;
         try {
             File file = new File("inventory.ser");
-            System.out.println(file.length());
             if (file.length() == 0) {
                 map = new HashMap<String, ListOfItems>();
             } else {
@@ -61,7 +60,7 @@ public class LoadSave {
             oos.writeObject(accounts);
             oos.close();
             fos.close();
-            System.out.printf("Saved account.");
+            System.out.println("Saved account.");
         }
         catch(IOException ioe) {
             ioe.printStackTrace();
@@ -72,8 +71,6 @@ public class LoadSave {
         List<Account> accounts = null;
         try {
             File file = new File("accounts.ser");
-            System.out.println(file.length());
-
             if (file.length() == 0) {
                 accounts = new ArrayList<>();
             } else {

@@ -81,6 +81,19 @@ public class Account implements Observer, Serializable {
         return amountDue;
     }
 
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public void setContact(String name, String number) {
+        CompanyContact contact = new CompanyContact(name, number);
+        this.contact = contact;
+    }
+
     @Override
     public void update(Observable o, Object arg) {
         int invNumber = (int) arg;
@@ -93,13 +106,12 @@ public class Account implements Observer, Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Account account = (Account) o;
-        return Objects.equals(companyName, account.companyName) &&
-                Objects.equals(phoneNumber, account.phoneNumber);
+        return Objects.equals(companyName, account.companyName);
     }
 
     @Override
     public int hashCode() {
 
-        return Objects.hash(companyName, phoneNumber);
+        return Objects.hash(companyName);
     }
 }
