@@ -110,9 +110,9 @@
                         <TextField fx:id="compName" layoutX="24.0" layoutY="80.0" prefHeight="45.0" prefWidth="297.0" promptText="Company Name" />
                         <TextField fx:id="compAdd" layoutX="24.0" layoutY="149.0" prefHeight="45.0" prefWidth="297.0" promptText="Company Address" />
                         <TextField fx:id="compPhone" layoutX="26.0" layoutY="218.0" prefHeight="45.0" prefWidth="297.0" promptText="Company Phone" />
-                        <Label layoutX="90.0" layoutY="282.0" text="Contact Info">
+                        <Label layoutX="90.0" layoutY="282.0" text="Contact Info" textFill="DARKORANGE">
                            <font>
-                              <Font name="System Bold" size="26.0" />
+                              <Font size="26.0" />
                            </font></Label>
                         <TextField fx:id="contName" layoutX="22.0" layoutY="330.0" prefHeight="45.0" prefWidth="297.0" promptText="Contact Name" />
                         <TextField fx:id="contPhone" layoutX="22.0" layoutY="391.0" prefHeight="45.0" prefWidth="297.0" promptText="Contact Phone" />
@@ -130,12 +130,10 @@
                               <Font name="System Bold" size="28.0" />
                            </font>
                         </Label>
-                        <Label fx:id="compNameLabel" layoutX="48.0" layoutY="64.0" />
-                        <Label fx:id="compAddLabel" layoutX="48.0" layoutY="104.0" />
-                        <Label fx:id="compPhoneLabel" layoutX="47.0" layoutY="144.0" />
-                        <Label fx:id="contNameLabel" layoutX="48.0" layoutY="182.0" />
-                        <Label fx:id="contPhoneLabel" layoutX="48.0" layoutY="224.0" />
-                        <Label fx:id="amountDueLabel" layoutX="48.0" layoutY="263.0" />
+                        <Label fx:id="amountDueLabel" layoutX="48.0" layoutY="85.0">
+                           <font>
+                              <Font size="14.0" />
+                           </font></Label>
                         <VBox fx:id="invBox" layoutX="-3.0" layoutY="317.0" prefHeight="236.0" prefWidth="249.0" />
                      </children>
               </AnchorPane>

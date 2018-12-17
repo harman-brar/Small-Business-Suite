@@ -120,6 +120,7 @@ public class AccountManager implements Serializable {
         vBox.setSpacing(10.0);
         vBox.getChildren().add(btn);
         btn.setOnAction(event -> {
+                amountDueLabel.setText("Amount due: " + account.getAmountDue().toString());
                 compName.setText(account.getCompanyName());
                 compAdd.setText(account.getAddress());
                 compPhone.setText(account.getPhone());
